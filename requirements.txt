@@ -1,4 +1,4 @@
-# EchoCRM AI service (ai/) runtime dependencies
+# Wavelength AI service (ai/) runtime dependencies
 fastapi
 uvicorn[standard]
 faster-whisper

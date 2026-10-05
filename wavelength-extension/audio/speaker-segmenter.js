@@ -1,5 +1,5 @@
 /**
- * EchoCRM Speaker Segmentation & Voice Activity Detection (VAD) Engine
+ * Wavelength Speaker Segmentation & Voice Activity Detection (VAD) Engine
  * Analyzes isolated SALESPERSON_MIC and REMOTE_AUDIO channels in real-time.
  * Generates an accurate timestamped speaker attribution timeline (SALESPERSON, REMOTE, OVERLAP, SILENCE).
  */

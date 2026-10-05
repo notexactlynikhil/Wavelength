@@ -16,13 +16,13 @@ const AppContent: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#F7F4EE] gap-4">
+      <div className="h-screen w-screen flex flex-col items-center justify-center bg-theme-base gap-4">
         <div className="relative w-12 h-12">
-          <div className="absolute inset-0 border-4 border-[#B85C38]/15 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-[#B85C38] border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 border-4 border-theme-accent/15 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-theme-accent border-t-transparent rounded-full animate-spin"></div>
         </div>
-        <p className="text-xs font-semibold tracking-wider text-[#B85C38] uppercase animate-pulse font-display">
-          Loading Echo CRM...
+        <p className="text-xs font-semibold tracking-wider text-theme-accent uppercase animate-pulse font-display">
+          Loading Wavelength...
         </p>
       </div>
     )

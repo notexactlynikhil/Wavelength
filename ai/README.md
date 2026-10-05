@@ -1,6 +1,6 @@
-# EchoCRM AI Backend — Audio → Transcription → Local LLM Pipeline (Phase 1)
+# Wavelength AI Backend — Audio → Transcription → Local LLM Pipeline (Phase 1)
 
-This module provides an isolated, offline-capable AI processing pipeline for the **EchoCRM / Echo CRM** desktop application.
+This module provides an isolated, offline-capable AI processing pipeline for the **Wavelength / Wavelength** desktop application.
 
 It transcribes call recordings locally using Whisper and extracts structured CRM data (summaries, sentiment, deal stage, products, action items, follow-ups) using a local LLM (Ollama / LLaMA 3.2).
 
@@ -9,7 +9,7 @@ It transcribes call recordings locally using Whisper and extracts structured CRM
 ## 1. Project Structure & Files Created
 
 ```text
-EchoCRM/
+Wavelength/
 ├── ai/
 │   ├── config/
 │   │   ├── __init__.py
@@ -109,19 +109,19 @@ test\sample-audio\sample.wav
 TRANSCRIPT
 ====================================
 
-Hi, this is Sarah Jenkins calling from APEX Global. I wanted to follow up on our discussion regarding the echocrm enterprise CRM platform. We are looking to deploy this for our sales team of 25 representatives. Overall, we are very excited about the real-time call transcription and automated sentiment tracking features. However, I do have a concern regarding our data migration timeline from Salesforce and whether your team can assist with data import before the end of the month. Could you send over a detailed pricing proposal and schedule a technical demonstration with our IT director for next Tuesday at 10am? If the pricing looks good and migration support is included, we are ready to move forward to contract negotiation.
+Hi, this is Sarah Jenkins calling from APEX Global. I wanted to follow up on our discussion regarding the wavelength enterprise CRM platform. We are looking to deploy this for our sales team of 25 representatives. Overall, we are very excited about the real-time call transcription and automated sentiment tracking features. However, I do have a concern regarding our data migration timeline from Salesforce and whether your team can assist with data import before the end of the month. Could you send over a detailed pricing proposal and schedule a technical demonstration with our IT director for next Tuesday at 10am? If the pricing looks good and migration support is included, we are ready to move forward to contract negotiation.
 
 ====================================
 AI ANALYSIS
 ====================================
 
 {
-    "summary": "APEX Global interested in EchoCRM CRM platform for sales team, with concerns about data migration timeline.",
+    "summary": "APEX Global interested in Wavelength CRM platform for sales team, with concerns about data migration timeline.",
     "sentiment": "positive",
     "deal_stage": "prospecting",
     "customer_intent": "Assistance with data import and pricing proposal before moving forward to contract negotiation.",
     "products_discussed": [
-        "echocrm enterprise CRM platform"
+        "wavelength enterprise CRM platform"
     ],
     "action_items": [
         {
@@ -181,7 +181,7 @@ When ready to connect this AI pipeline to the Electron desktop application and S
 
 ## 9. In-Process Llama.cpp Provider (Standalone Desktop Builds)
 
-For a self-contained desktop demo build that runs without an external background service (like Ollama), EchoCRM supports an in-process `llama.cpp` LLM provider.
+For a self-contained desktop demo build that runs without an external background service (like Ollama), Wavelength supports an in-process `llama.cpp` LLM provider.
 
 ### Installation
 Install `llama-cpp-python` using the prebuilt CPU wheel index (no compiler required):

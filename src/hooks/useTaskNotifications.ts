@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { getGlobalTasks } from '../services/workspaceService'
 
-const PREF_KEY = 'echocrm.notificationsEnabled'
-const SEEN_KEY = 'echocrm.notifiedTasks'
+const PREF_KEY = 'wavelength.notificationsEnabled'
+const SEEN_KEY = 'wavelength.notifiedTasks'
 const CHECK_INTERVAL_MS = 5 * 60 * 1000
 
 export function getNotificationsEnabled(): boolean {
@@ -46,7 +46,7 @@ export function useTaskNotifications() {
         if (fresh.length === 0) return
 
         const overdueCount = fresh.filter((task) => new Date(task.due_date!) < new Date(new Date().setHours(0, 0, 0, 0))).length
-        const title = overdueCount > 0 ? 'EchoCRM — overdue tasks' : 'EchoCRM — tasks due today'
+        const title = overdueCount > 0 ? 'Wavelength — overdue tasks' : 'Wavelength — tasks due today'
         const body = `${fresh.length} task${fresh.length > 1 ? 's' : ''} need attention. First: ${fresh[0].description}`
 
         await window.electronAPI.notify(title, body)

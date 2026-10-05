@@ -1,12 +1,12 @@
 /**
- * EchoCRM Supabase Client for Browser Extension
+ * Wavelength Supabase Client for Browser Extension
  * Uses standard REST & Storage APIs with the client-side anon key.
  * Authenticates as the signed-in CRM user so RLS owner policies are satisfied,
  * then performs idempotent database upserts and WebM audio uploads.
  */
 
 const DEFAULT_BUCKET = 'meeting-recordings';
-const SESSION_STORAGE_KEY = 'echocrmSession';
+const SESSION_STORAGE_KEY = 'wavelengthSession';
 
 class SupabaseExtensionClient {
   constructor(config = null) {
@@ -20,8 +20,8 @@ class SupabaseExtensionClient {
    * Lazily and dynamically resolves Supabase configuration from:
    * 1. Explicit constructor arguments
    * 2. globalThis.__ECHOCRM_CONFIG__ (from config.local.js or build-time injection)
-   * 3. chrome.storage.local ('echocrm_supabase_url', 'echocrm_supabase_anon_key')
-   * 4. globalThis.getEchoCRMConfig() resolver
+   * 3. chrome.storage.local ('wavelength_supabase_url', 'wavelength_supabase_anon_key')
+   * 4. globalThis.getWavelengthConfig() resolver
    */
   async ensureConfig() {
     if (this.url && this.anonKey && !this.url.includes('your-project')) {
@@ -46,14 +46,14 @@ class SupabaseExtensionClient {
     try {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         const stored = await chrome.storage.local.get([
-          'echocrm_supabase_url',
-          'echocrm_supabase_anon_key',
-          'echocrm_supabase_bucket'
+          'wavelength_supabase_url',
+          'wavelength_supabase_anon_key',
+          'wavelength_supabase_bucket'
         ]);
-        if (stored.echocrm_supabase_url && stored.echocrm_supabase_anon_key) {
-          this.url = stored.echocrm_supabase_url.replace(/\/$/, '');
-          this.anonKey = stored.echocrm_supabase_anon_key;
-          this.bucket = stored.echocrm_supabase_bucket || DEFAULT_BUCKET;
+        if (stored.wavelength_supabase_url && stored.wavelength_supabase_anon_key) {
+          this.url = stored.wavelength_supabase_url.replace(/\/$/, '');
+          this.anonKey = stored.wavelength_supabase_anon_key;
+          this.bucket = stored.wavelength_supabase_bucket || DEFAULT_BUCKET;
           return { url: this.url, anonKey: this.anonKey, bucket: this.bucket };
         }
       }
@@ -61,10 +61,10 @@ class SupabaseExtensionClient {
       /* chrome.storage unavailable in this context */
     }
 
-    // 3. Check getEchoCRMConfig if defined in config.js
-    if (typeof globalThis.getEchoCRMConfig === 'function') {
+    // 3. Check getWavelengthConfig if defined in config.js
+    if (typeof globalThis.getWavelengthConfig === 'function') {
       try {
-        const cfg = await globalThis.getEchoCRMConfig();
+        const cfg = await globalThis.getWavelengthConfig();
         if (cfg && cfg.url && cfg.anonKey && cfg.isConfigured) {
           this.url = cfg.url.replace(/\/$/, '');
           this.anonKey = cfg.anonKey;
@@ -98,57 +98,71 @@ class SupabaseExtensionClient {
    * available regardless of which storage backend a given context can access.
    */
   async getStoredSession() {
-    // Prefer localStorage first: it is synchronously shared between the popup
-    // and the offscreen document and never requires an async chrome API.
+    const staySignedIn = localStorage.getItem('wavelength.ext.staySignedIn') !== 'false';
+    
+    if (!staySignedIn) {
+      if (typeof sessionStorage !== 'undefined') {
+        const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      }
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.session) {
+        const data = await chrome.storage.session.get(SESSION_STORAGE_KEY);
+        return data[SESSION_STORAGE_KEY] || null;
+      }
+      return null;
+    }
+
     try {
       if (typeof localStorage !== 'undefined') {
         const raw = localStorage.getItem(SESSION_STORAGE_KEY);
         if (raw) return JSON.parse(raw);
       }
-    } catch (e) {
-      /* localStorage unavailable */
-    }
+    } catch (e) {}
 
     try {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         const data = await chrome.storage.local.get(SESSION_STORAGE_KEY);
         const session = data[SESSION_STORAGE_KEY] || null;
         if (session) {
-          // Hydrate localStorage so other contexts see it synchronously.
           try { localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session)); } catch (e) {}
         }
         return session;
       }
-    } catch (e) {
-      /* chrome.storage unavailable in this context */
-    }
+    } catch (e) {}
 
     return null;
   }
 
   async setStoredSession(session) {
-    // Always keep both backends in sync.
+    const staySignedIn = localStorage.getItem('wavelength.ext.staySignedIn') !== 'false';
+    
     try {
       if (session) {
-        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        if (staySignedIn) {
+          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        } else {
+          sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        }
       } else {
         localStorage.removeItem(SESSION_STORAGE_KEY);
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
       }
-    } catch (e) {
-      /* localStorage unavailable */
-    }
+    } catch (e) {}
 
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      if (typeof chrome !== 'undefined' && chrome.storage) {
         if (session) {
-          await chrome.storage.local.set({ [SESSION_STORAGE_KEY]: session });
+          if (staySignedIn) {
+            if (chrome.storage.local) await chrome.storage.local.set({ [SESSION_STORAGE_KEY]: session });
+          } else {
+            if (chrome.storage.session) await chrome.storage.session.set({ [SESSION_STORAGE_KEY]: session });
+          }
         } else {
-          await chrome.storage.local.remove(SESSION_STORAGE_KEY);
+          if (chrome.storage.local) await chrome.storage.local.remove(SESSION_STORAGE_KEY);
+          if (chrome.storage.session) await chrome.storage.session.remove(SESSION_STORAGE_KEY);
         }
       }
-    } catch (e) {
-      /* chrome.storage unavailable in this context */
-    }
+    } catch (e) {}
   }
 
   // ---------------------------------------------------------------------------
@@ -293,7 +307,7 @@ class SupabaseExtensionClient {
 
   /**
    * Create a new customer for the signed-in user.
-   * Uses the SAME schema as the desktop EchoCRM customer creation.
+   * Uses the SAME schema as the desktop Wavelength customer creation.
    * Returns the created customer row including its id.
    */
   async createCustomer({ name, phone = null, email = null, company = null, tags = [] }) {
@@ -342,7 +356,7 @@ class SupabaseExtensionClient {
     const session = await this.getValidSession();
     const ownerId = record.ownerId || (session && session.user ? session.user.id : null);
     if (!ownerId) {
-      throw new Error('Not signed in to EchoCRM. Open the extension and sign in to sync recordings.');
+      throw new Error('Not signed in to Wavelength. Open the extension and sign in to sync recordings.');
     }
 
     const endpoint = `${this.url}/rest/v1/meeting_recordings?on_conflict=id`;
@@ -417,7 +431,7 @@ class SupabaseExtensionClient {
   /**
    * Complete upload workflow: DB Upsert -> Storage Upload -> DB Status Update.
    * Sets status to 'uploaded' on success, which triggers automatic processing
-   * in the desktop EchoCRM app via realtime subscription.
+   * in the desktop Wavelength app via realtime subscription.
    *
    * @param {object} record - Recording metadata including optional customerId
    * @param {Blob} audioBlob - The audio data

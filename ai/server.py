@@ -14,7 +14,7 @@ from ai.config.settings import settings
 from ai.pipeline.orchestrator import process_call, CallPipeline
 from ai.analysis.llm_provider import get_llm_provider, LocalLlamaProvider
 
-app = FastAPI(title="EchoCRM AI Service", version="1.0.0")
+app = FastAPI(title="Wavelength AI Service", version="1.0.0")
 
 # Security: Restrict CORS strictly to local development origins
 app.add_middleware(
@@ -59,7 +59,7 @@ def health_check():
     provider = get_llm_provider()
     return {
         "status": "ok",
-        "service": "echocrm-ai",
+        "service": "wavelength-ai",
         "whisper_model": settings.WHISPER_MODEL_SIZE,
         "llm_provider": provider.get_provider_name(),
         "llm_model": provider.get_model_name(),
@@ -103,7 +103,7 @@ def handle_process_call(request: ProcessCallRequest) -> Dict[str, Any]:
 def main():
 
     port = int(os.getenv("AI_SERVICE_PORT", "8000"))
-    print(f"Starting EchoCRM AI Service on http://127.0.0.1:{port}")
+    print(f"Starting Wavelength AI Service on http://127.0.0.1:{port}")
     uvicorn.run(app, host="127.0.0.1", port=port, log_level="info")
 
 if __name__ == "__main__":

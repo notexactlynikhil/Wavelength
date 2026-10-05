@@ -163,25 +163,25 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
           type="button"
           onClick={onBack}
           aria-label="Back to Customers List"
-          className="p-2 bg-[#FFFDF9] border border-[#E8E1D8] hover:bg-[#F0D8CA]/40 text-[#817A72] hover:text-[#292522] rounded-xl transition duration-150 active:scale-95 shadow-xs"
+          className="p-2 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl transition duration-150 active:scale-95 shadow-xs"
           title="Back to Customers List"
         >
           <ArrowLeft className="w-4 h-4" />
         </button>
 
         <div className="flex items-center gap-2 text-sm font-semibold">
-          <button type="button" onClick={onBack} className="text-[#817A72] hover:text-[#292522] transition">
+          <button type="button" onClick={onBack} className="text-theme-textMuted hover:text-theme-text transition">
             Customers
           </button>
-          <ChevronRight className="w-4 h-4 text-[#817A72]/60 shrink-0" />
-          <span className="text-[#292522] font-bold font-display">{customer.name}</span>
+          <ChevronRight className="w-4 h-4 text-theme-textMuted/60 shrink-0" />
+          <span className="text-theme-text font-bold font-display">{customer.name}</span>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
           <button
             type="button"
             onClick={handleExportCsv}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFDF9] border border-[#E8E1D8] hover:bg-[#F0D8CA]/40 text-[#817A72] hover:text-[#292522] rounded-xl text-xs font-semibold transition shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl text-xs font-semibold transition shadow-xs"
             title="Export customer history as CSV"
           >
             <Download className="w-3.5 h-3.5" />
@@ -191,32 +191,32 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
             type="button"
             onClick={handleExportPdf}
             disabled={exportingPdf}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFDF9] border border-[#E8E1D8] hover:bg-[#F0D8CA]/40 text-[#817A72] hover:text-[#292522] rounded-xl text-xs font-semibold transition disabled:opacity-50 shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl text-xs font-semibold transition disabled:opacity-50 shadow-xs"
             title="Export customer history as PDF"
           >
-            {exportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B85C38]" /> : <FileText className="w-3.5 h-3.5" />}
+            {exportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin text-theme-accent" /> : <FileText className="w-3.5 h-3.5" />}
             <span>PDF</span>
           </button>
         </div>
       </div>
 
       {exportError && (
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#B94A48]/10 border border-[#B94A48]/20 text-[#B94A48] text-xs shrink-0">
-          <AlertCircle className="w-4 h-4 text-[#B94A48] shrink-0 mt-0.5" />
+        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs shrink-0">
+          <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
           <span>{exportError}</span>
         </div>
       )}
 
       {/* 2. Error Display Panel */}
       {error && (
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#B94A48]/10 border border-[#B94A48]/20 text-[#B94A48] text-xs shrink-0">
-          <AlertCircle className="w-4 h-4 text-[#B94A48] shrink-0 mt-0.5" />
+        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs shrink-0">
+          <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       {/* 3. Workspace Tab Selection Header */}
-      <div className="flex border-b border-[#E8E1D8] shrink-0 gap-2">
+      <div className="flex border-b border-theme-border shrink-0 gap-2">
         {tabItems.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -226,8 +226,8 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition border-b-2 flex items-center gap-2 ${
                 isActive
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-[#817A72] hover:text-[#292522] hover:border-[#E8E1D8]'
+                  ? 'border-theme-accent text-theme-accent'
+                  : 'border-transparent text-theme-textMuted hover:text-theme-text hover:border-theme-border'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

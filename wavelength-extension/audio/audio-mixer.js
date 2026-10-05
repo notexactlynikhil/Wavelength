@@ -1,5 +1,5 @@
 /**
- * EchoCRM Audio Mixer Module
+ * Wavelength Audio Mixer Module
  * Manages 48kHz Web Audio context, live playback preservation,
  * strict source isolation (SALESPERSON_MIC on Channel 0, REMOTE_AUDIO on Channel 1),
  * and connects real-time SpeakerSegmenter VAD analysis.

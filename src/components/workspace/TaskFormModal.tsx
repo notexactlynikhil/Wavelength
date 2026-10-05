@@ -144,27 +144,27 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none animate-fadeIn">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-[#292522]/40 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-theme-base/80 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
 
       {/* Modal Card */}
       <div 
-        className="bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl w-full max-w-lg shadow-xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] animate-slideUp"
+        className="bg-theme-surface border border-theme-border rounded-2xl w-full max-w-lg shadow-xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] animate-slideUp"
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-modal-title"
       >
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#E8E1D8] flex items-center justify-between shrink-0">
-          <h2 id="task-modal-title" className="text-sm font-bold text-[#292522] uppercase tracking-wider font-display flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#B85C38]" />
+        <div className="px-6 py-4 border-b border-theme-border flex items-center justify-between shrink-0">
+          <h2 id="task-modal-title" className="text-sm font-bold text-theme-text uppercase tracking-wider font-display flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-theme-accent" />
             <span>{task ? 'Edit Task' : initialTitle ? 'Create Follow-up Task' : 'Add New Task'}</span>
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 text-[#817A72] hover:text-[#292522] rounded-lg hover:bg-[#F7F4EE] transition"
+            className="p-1.5 text-theme-textMuted hover:text-theme-text rounded-lg hover:bg-theme-base transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -175,17 +175,17 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
           
           {/* Error Message */}
           {validationError && (
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#B94A48]/10 border border-[#B94A48]/20 text-[#B94A48] text-xs animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-[#B94A48] shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs animate-fadeIn">
+              <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
               <span>{validationError}</span>
             </div>
           )}
 
           {/* Task Title */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center justify-between">
-              <span>Task Action / Title <span className="text-[#B85C38]">*</span></span>
-              <span className="text-[10px] text-[#817A72]/70 font-normal">Short concise action</span>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center justify-between">
+              <span>Task Action / Title <span className="text-theme-accent">*</span></span>
+              <span className="text-[10px] text-theme-textMuted/70 font-normal">Short concise action</span>
             </label>
             <input
               required
@@ -194,15 +194,15 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-[#292522] text-sm transition placeholder-[#817A72]"
+              className="w-full px-3.5 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-theme-text text-sm transition placeholder-theme-textMuted"
             />
           </div>
 
           {/* Description & Details */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center justify-between">
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center justify-between">
               <span>Detailed Notes / Context</span>
-              <span className="text-[10px] text-[#817A72]/70 font-normal">Optional</span>
+              <span className="text-[10px] text-theme-textMuted/70 font-normal">Optional</span>
             </label>
             <div className="relative">
               <textarea
@@ -211,7 +211,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-[#292522] text-sm transition resize-none placeholder-[#817A72]"
+                className="w-full px-3.5 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-theme-text text-sm transition resize-none placeholder-theme-textMuted"
               />
             </div>
           </div>
@@ -220,15 +220,15 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Priority Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center gap-1.5">
-                <Flag className="w-3.5 h-3.5 text-[#817A72]" />
+              <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center gap-1.5">
+                <Flag className="w-3.5 h-3.5 text-theme-textMuted" />
                 <span>Priority</span>
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as TaskPriority)}
                 disabled={loading}
-                className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:outline-none rounded-xl text-[#292522] text-xs font-medium transition"
+                className="w-full px-3 py-2 bg-theme-surface border border-theme-border focus:border-theme-accent focus:outline-none rounded-xl text-theme-text text-xs font-medium transition"
               >
                 <option value="high">High Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -238,15 +238,15 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
 
             {/* Status Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#817A72]" />
+              <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-theme-textMuted" />
                 <span>Status</span>
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'pending' | 'in_progress' | 'done')}
                 disabled={loading}
-                className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:outline-none rounded-xl text-[#292522] text-xs font-medium transition"
+                className="w-full px-3 py-2 bg-theme-surface border border-theme-border focus:border-theme-accent focus:outline-none rounded-xl text-theme-text text-xs font-medium transition"
               >
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
@@ -259,8 +259,8 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Due Date */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-[#817A72]" />
+              <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-theme-textMuted" />
                 <span>Due Date</span>
               </label>
               <input
@@ -268,14 +268,14 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 disabled={loading}
-                className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:outline-none rounded-xl text-[#292522] text-xs transition"
+                className="w-full px-3 py-2 bg-theme-surface border border-theme-border focus:border-theme-accent focus:outline-none rounded-xl text-theme-text text-xs transition"
               />
             </div>
 
             {/* Due Time */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#817A72]" />
+              <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-theme-textMuted" />
                 <span>Due Time</span>
               </label>
               <input
@@ -283,25 +283,25 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                 value={dueTime}
                 onChange={(e) => setDueTime(e.target.value)}
                 disabled={loading}
-                className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:outline-none rounded-xl text-[#292522] text-xs transition"
+                className="w-full px-3 py-2 bg-theme-surface border border-theme-border focus:border-theme-accent focus:outline-none rounded-xl text-theme-text text-xs transition"
               />
             </div>
           </div>
 
           {/* Footer Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-[#E8E1D8]">
+          <div className="flex justify-end gap-3 pt-4 border-t border-theme-border">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-semibold text-[#817A72] hover:text-[#292522] border border-[#E8E1D8] bg-[#FFFDF9] hover:bg-[#F7F4EE] rounded-xl transition"
+              className="px-4 py-2 text-sm font-semibold text-theme-textMuted hover:text-theme-text border border-theme-border bg-theme-surface hover:bg-theme-base rounded-xl transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 bg-[#B85C38] hover:bg-[#a24f2f] text-white rounded-xl text-sm font-semibold shadow-xs transition flex items-center justify-center disabled:opacity-50"
+              className="px-5 py-2 bg-theme-accent hover:bg-theme-accentHover text-white rounded-xl text-sm font-semibold shadow-xs transition flex items-center justify-center disabled:opacity-50"
             >
               {loading ? (
                 <span className="border-2 border-white border-t-transparent w-4 h-4 rounded-full animate-spin" />

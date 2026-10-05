@@ -29,7 +29,7 @@ export function buildCustomerCsv(data: CustomerExportData): string {
   const { customer, calls, summaries, tasks } = data
   const lines: string[] = []
 
-  lines.push(toCsvRow(['EchoCRM Customer Export']))
+  lines.push(toCsvRow(['Wavelength Customer Export']))
   lines.push(toCsvRow(['Customer', customer.name]))
   lines.push(toCsvRow(['Email', customer.email || '']))
   lines.push(toCsvRow(['Phone', customer.phone || '']))
@@ -82,7 +82,7 @@ export function downloadCsv(filename: string, csv: string) {
  */
 export function exportCustomerCsv(data: CustomerExportData) {
   const safeName = data.customer.name.replace(/[^a-z0-9]+/gi, '_').toLowerCase()
-  downloadCsv(`echocrm_${safeName}_${new Date().toISOString().slice(0, 10)}.csv`, buildCustomerCsv(data))
+  downloadCsv(`wavelength_${safeName}_${new Date().toISOString().slice(0, 10)}.csv`, buildCustomerCsv(data))
 }
 
 /**
@@ -110,7 +110,7 @@ export function buildCustomerHtml(data: CustomerExportData): string {
 <html>
 <head>
 <meta charset="utf-8" />
-<title>EchoCRM — ${customer.name}</title>
+<title>Wavelength — ${customer.name}</title>
 <style>
   body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #1e293b; padding: 32px; }
   h1 { margin: 0; font-size: 22px; }
@@ -147,7 +147,7 @@ export function buildCustomerHtml(data: CustomerExportData): string {
 export async function exportCustomerPdf(data: CustomerExportData) {
   const html = buildCustomerHtml(data)
   const safeName = data.customer.name.replace(/[^a-z0-9]+/gi, '_').toLowerCase()
-  const filename = `echocrm_${safeName}_${new Date().toISOString().slice(0, 10)}.pdf`
+  const filename = `wavelength_${safeName}_${new Date().toISOString().slice(0, 10)}.pdf`
 
   if (window.electronAPI?.exportPdf) {
     await window.electronAPI.exportPdf(html, filename)

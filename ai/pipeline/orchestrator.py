@@ -20,7 +20,7 @@ from ai.analysis.customer_name_extractor import (
 
 class CallPipeline:
     """
-    Complete audio processing pipeline for EchoCRM AI:
+    Complete audio processing pipeline for Wavelength AI:
     Audio -> Speech-to-Text -> Local LLM -> Structured JSON
 
     Customer handling:

@@ -184,7 +184,7 @@ class MockLLMProvider(LLMProvider):
             "sentiment": "positive",
             "deal_stage": "negotiation",
             "customer_intent": "Customer expressed interest in purchasing software seats.",
-            "products_discussed": ["EchoCRM Enterprise CRM"],
+            "products_discussed": ["Wavelength Enterprise CRM"],
             "action_items": [
                 {
                     "description": "Send proposal and schedule technical follow up",

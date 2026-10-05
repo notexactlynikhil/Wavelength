@@ -7,6 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
+        theme: {
+          base: '#1C1917',
+          surface: '#292522',
+          border: '#44403C',
+          text: '#F5F5F5',
+          textMuted: '#A8A29E',
+          accent: '#E88C64',
+          accentHover: '#A14F2E',
+          accentMuted: '#432C24',
+          danger: '#EF4444',
+          dangerMuted: '#3F2222',
+        },
         // Core design system tokens: Warm Ivory + Terracotta
         ivory: {
           50: '#FAF8F4',

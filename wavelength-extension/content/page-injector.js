@@ -1,5 +1,5 @@
 /**
- * EchoCRM Page-World WebRTC Microphone Injector
+ * Wavelength Page-World WebRTC Microphone Injector
  * Runs in the MAIN execution world at document_start.
  * Intercepts navigator.mediaDevices.getUserMedia() and RTCPeerConnection to route outgoing meeting audio
  * through an AudioContext destination, enabling genuine remote participant disclosure across Google Meet, Teams, and Zoom.
@@ -66,7 +66,7 @@
 
       return new MediaStream([mixedTrack, ...rawStream.getVideoTracks()]);
     } catch (err) {
-      console.warn('[EchoCRM] Audio pipeline error, falling back to raw stream:', err);
+      console.warn('[Wavelength] Audio pipeline error, falling back to raw stream:', err);
       return rawStream;
     }
   }
@@ -149,7 +149,7 @@
 
       return new Promise((resolve) => {
         bufferSource.onended = () => {
-          console.log('[EchoCRM] Disclosure audio finished playing into meeting WebRTC track.');
+          console.log('[Wavelength] Disclosure audio finished playing into meeting WebRTC track.');
           resolve({
             delivered: true,
             reason: 'TRANSMITTED_TO_WEBRTC_TRACK',
@@ -169,7 +169,7 @@
         }, (decodedBuffer.duration + 0.5) * 1000);
       });
     } catch (err) {
-      console.error('[EchoCRM] Failed to play disclosure into WebRTC track:', err);
+      console.error('[Wavelength] Failed to play disclosure into WebRTC track:', err);
       return {
         delivered: false,
         reason: 'TRANSMISSION_ERROR',
@@ -178,5 +178,5 @@
     }
   }
 
-  console.log('[EchoCRM] Page-world WebRTC audio injector active.');
+  console.log('[Wavelength] Page-world WebRTC audio injector active.');
 })();

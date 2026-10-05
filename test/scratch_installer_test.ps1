@@ -1,5 +1,5 @@
-$installerPath = ".\release\EchoCRM Setup 1.0.0.exe"
-$testInstallDir = "C:\Users\athul\AppData\Local\Temp\EchoCRM-Final-Audit-Install"
+$installerPath = ".\release\Wavelength Setup 1.0.0.exe"
+$testInstallDir = "C:\Users\athul\AppData\Local\Temp\Wavelength-Final-Audit-Install"
 
 if (Test-Path $testInstallDir) {
     Remove-Item -Recurse -Force $testInstallDir -ErrorAction SilentlyContinue
@@ -9,9 +9,9 @@ Write-Host "Running silent installation to $testInstallDir..."
 $proc = Start-Process -FilePath $installerPath -ArgumentList "/S", "/D=$testInstallDir" -Wait -PassThru
 Write-Host "Installer finished with exit code: $($proc.ExitCode)"
 
-$installedExe = Join-Path $testInstallDir "EchoCRM.exe"
+$installedExe = Join-Path $testInstallDir "Wavelength.exe"
 if (Test-Path $installedExe) {
-    Write-Host "EchoCRM.exe found at: $installedExe"
+    Write-Host "Wavelength.exe found at: $installedExe"
     $p = Start-Process -FilePath $installedExe -PassThru
     Start-Sleep -Seconds 6
     Write-Host "Launched installed PID: $($p.Id)"
@@ -27,7 +27,7 @@ if (Test-Path $installedExe) {
     taskkill /pid $p.Id /T /F
     Start-Sleep -Seconds 2
 } else {
-    Write-Host "ERROR: EchoCRM.exe was not created in $testInstallDir"
+    Write-Host "ERROR: Wavelength.exe was not created in $testInstallDir"
 }
 
 # Clean up test install directory

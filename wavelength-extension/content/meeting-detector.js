@@ -1,5 +1,5 @@
 /**
- * EchoCRM Meeting Detector Content Script
+ * Wavelength Meeting Detector Content Script
  * Bridges communication between extension background and page-world WebRTC injector.
  * Loads extension audio assets and transfers them to page injector to bypass meeting CSP.
  */

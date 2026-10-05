@@ -60,7 +60,7 @@ async function runAllTests() {
   console.log('--- 1. Chrome Extension Credential Decoupling ---');
 
 runTest('extension client.js contains no hardcoded Supabase URL', () => {
-  const clientPath = path.join(rootDir, 'echocrm-extension', 'supabase', 'client.js');
+  const clientPath = path.join(rootDir, 'wavelength-extension', 'supabase', 'client.js');
   const content = fs.readFileSync(clientPath, 'utf8');
 
   assert.ok(!content.includes('qrstkwlakctszamkvsgh.supabase.co'), 'Found hardcoded project Supabase URL in client.js');
@@ -68,7 +68,7 @@ runTest('extension client.js contains no hardcoded Supabase URL', () => {
 });
 
 runTest('extension client.js contains no hardcoded anon/publishable or secret key', () => {
-  const clientPath = path.join(rootDir, 'echocrm-extension', 'supabase', 'client.js');
+  const clientPath = path.join(rootDir, 'wavelength-extension', 'supabase', 'client.js');
   const content = fs.readFileSync(clientPath, 'utf8');
 
   assert.ok(!content.includes('sb_publishable_'), 'Found hardcoded sb_publishable_ key in client.js');
@@ -76,7 +76,7 @@ runTest('extension client.js contains no hardcoded anon/publishable or secret ke
 });
 
 runTest('extension config.example.js exists with placeholders only', () => {
-  const examplePath = path.join(rootDir, 'echocrm-extension', 'config.example.js');
+  const examplePath = path.join(rootDir, 'wavelength-extension', 'config.example.js');
   assert.ok(fs.existsSync(examplePath), 'config.example.js must exist');
   const content = fs.readFileSync(examplePath, 'utf8');
 
@@ -90,12 +90,12 @@ runTest('extension config.example.js exists with placeholders only', () => {
   const prevGlobal = globalThis.__ECHOCRM_CONFIG__;
 
   // Import config.js
-  const configModule = await import('../echocrm-extension/config.js');
-  const { getEchoCRMConfig } = configModule;
+  const configModule = await import('../wavelength-extension/config.js');
+  const { getWavelengthConfig } = configModule;
 
   // Case A: Unconfigured state
   globalThis.__ECHOCRM_CONFIG__ = null;
-  const unconfigured = await getEchoCRMConfig();
+  const unconfigured = await getWavelengthConfig();
   assert.strictEqual(unconfigured.isConfigured, false, 'Should be unconfigured when no config provided');
   assert.strictEqual(unconfigured.url, '', 'URL should be empty string when unconfigured');
 
@@ -106,14 +106,14 @@ runTest('extension config.example.js exists with placeholders only', () => {
     bucket: 'meeting-recordings'
   };
 
-  const configured = await getEchoCRMConfig();
+  const configured = await getWavelengthConfig();
   assert.strictEqual(configured.isConfigured, true, 'Should be configured when valid global provided');
   assert.strictEqual(configured.url, 'https://test-project.supabase.co');
   assert.strictEqual(configured.anonKey, 'anon-test-key-12345');
 
   // Case C: Trailing slash normalization
   globalThis.__ECHOCRM_CONFIG__.url = 'https://test-project.supabase.co/';
-  const normalized = await getEchoCRMConfig();
+  const normalized = await getWavelengthConfig();
   assert.strictEqual(normalized.url, 'https://test-project.supabase.co', 'Trailing slash must be stripped');
 
   // Restore global state
@@ -125,8 +125,8 @@ runTest('extension config.example.js exists with placeholders only', () => {
 // -----------------------------------------------------------------------------
 console.log('\n--- 2. Client-Side Secret Leak Audit ---');
 
-runTest('no service-role or secret keys in src/ or echocrm-extension/ or root code', () => {
-  const dirsToScan = ['src', 'echocrm-extension'];
+runTest('no service-role or secret keys in src/ or wavelength-extension/ or root code', () => {
+  const dirsToScan = ['src', 'wavelength-extension'];
   const rootFiles = ['main.js', 'preload.js'];
 
   function scanDir(dir) {
@@ -181,8 +181,8 @@ runTest('.gitignore protects .env, .env.local, and extension config.local.js', (
   assert.ok(/^\.env$/m.test(content), '.gitignore must include .env');
   assert.ok(/^\.env\.local$/m.test(content), '.gitignore must include .env.local');
   assert.ok(
-    content.includes('echocrm-extension/config.local.js'),
-    '.gitignore must include echocrm-extension/config.local.js'
+    content.includes('wavelength-extension/config.local.js'),
+    '.gitignore must include wavelength-extension/config.local.js'
   );
 });
 

@@ -1,5 +1,5 @@
 /**
- * EchoCRM Popup Script v1.4
+ * Wavelength Popup Script v1.4
  * Handles meeting detection, WebRTC injector readiness, live VAD meters,
  * speaker attribution timeline, customer selection/creation, and audio file upload.
  */
@@ -61,6 +61,7 @@ const cloudSignInBtn = document.getElementById('cloudSignInBtn');
 const cloudSignOutBtn = document.getElementById('cloudSignOutBtn');
 const cloudUserEmail = document.getElementById('cloudUserEmail');
 const cloudAuthError = document.getElementById('cloudAuthError');
+const cloudStaySignedIn = document.getElementById('cloudStaySignedIn');
 
 // Customer elements
 const customerSearchInput = document.getElementById('customerSearchInput');
@@ -93,6 +94,12 @@ const uploadProgressBar = document.getElementById('uploadProgressBar');
 const uploadProgressLabel = document.getElementById('uploadProgressLabel');
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (cloudStaySignedIn) {
+    cloudStaySignedIn.checked = localStorage.getItem('wavelength.ext.staySignedIn') !== 'false';
+    cloudStaySignedIn.addEventListener('change', (e) => {
+      localStorage.setItem('wavelength.ext.staySignedIn', String(e.target.checked));
+    });
+  }
   setupEventListeners();
   await checkStatus();
   await initCloud();
@@ -304,7 +311,7 @@ async function handleConfirmUpload() {
   if (!pendingUploadFile) return;
 
   if (!window.supabaseClient || !cloudIsSignedIn) {
-    showAlert('Please sign in to EchoCRM before uploading.');
+    showAlert('Please sign in to Wavelength before uploading.');
     return;
   }
 
@@ -358,7 +365,7 @@ async function handleConfirmUpload() {
 
     setTimeout(() => {
       hideUploadConfirmPanel();
-      syncToast('Audio file uploaded. EchoCRM will process it automatically.');
+      syncToast('Audio file uploaded. Wavelength will process it automatically.');
     }, 2000);
 
   } catch (err) {
@@ -398,7 +405,7 @@ function setupEventListeners() {
     const email = (cloudEmail.value || '').trim();
     const password = cloudPassword.value || '';
     if (!email || !password) {
-      showCloudError('Enter your EchoCRM email and password.');
+      showCloudError('Enter your Wavelength email and password.');
       return;
     }
     cloudSignInBtn.disabled = true;
@@ -831,7 +838,7 @@ async function loadRecordingsList() {
         </div>
         <div class="item-actions">
           ${canSync ? `
-          <button class="icon-btn sync-btn" data-id="${item.id}" title="Sync to EchoCRM">
+          <button class="icon-btn sync-btn" data-id="${item.id}" title="Sync to Wavelength">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01.88-7.9 5 5 0 019.9-1.2A4.5 4.5 0 1117 16H7z"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v6m0-6l-2.5 2.5M12 12l2.5 2.5"/>
@@ -875,7 +882,7 @@ async function loadRecordingsList() {
 async function syncRecording(id) {
   if (!window.supabaseClient || !window.recordingStore) return;
   if (!cloudIsSignedIn) {
-    showAlert('Sign in to EchoCRM above before syncing recordings.');
+    showAlert('Sign in to Wavelength above before syncing recordings.');
     return;
   }
 
@@ -911,7 +918,7 @@ async function syncRecording(id) {
 
     await window.supabaseClient.uploadRecording(enrichedRecord, record.blob, 'webm');
     await window.recordingStore.updateRecording(id, { status: 'uploaded', lastError: null });
-    syncToast('Recording synced to EchoCRM.');
+    syncToast('Recording synced to Wavelength.');
   } catch (err) {
     await window.recordingStore.updateRecording(id, {
       status: 'upload_failed',

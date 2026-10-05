@@ -1,10 +1,10 @@
 /**
- * EchoCRM Recording Store - IndexedDB Storage
+ * Wavelength Recording Store - IndexedDB Storage
  * Stores meeting audio recordings, metadata, and audio chunks locally.
  * Retains chunks for crash-resilience and tracks Supabase upload lifecycle.
  */
 
-const DB_NAME = 'EchoCRMRecordingsDB';
+const DB_NAME = 'WavelengthRecordingsDB';
 const DB_VERSION = 2;
 const STORE_RECORDINGS = 'recordings';
 const STORE_CHUNKS = 'chunks';

@@ -4,13 +4,13 @@ A local-first CRM for real-estate sales teams: capture meetings, transcribe and
 summarize them with an offline AI pipeline, and manage customers, tasks and
 deals in a desktop app backed by Supabase.
 
-EchoCRM is made of **three runtime components** that work together:
+Wavelength is made of **three runtime components** that work together:
 
 | Component | Path | What it does |
 |---|---|---|
 | Desktop app | `src/`, `main.js`, `preload.js` | Electron + React + TypeScript + Tailwind client (auth, dashboard, customers, workspace, deal pipeline, search, export, notifications, settings). |
 | AI service | `ai/` | Local Python FastAPI service: `faster-whisper` transcription + LLaMA 3.2 3B summarization via Ollama. Started automatically by Electron. |
-| Chrome extension | `echocrm-extension/` | Captures Google Meet / Zoom / Teams tab audio, segments speakers, and uploads recordings to Supabase. |
+| Chrome extension | `wavelength-extension/` | Captures Google Meet / Zoom / Teams tab audio, segments speakers, and uploads recordings to Supabase. |
 
 > Everything runs offline except Supabase (data sync) and the optional in-process
 > LLM download. No audio leaves the machine for AI processing.
@@ -63,14 +63,14 @@ npm.cmd run electron:build
 ```
 
 Packaged distribution outputs in `release/`:
-- **Windows Installer**: `release/EchoCRM Setup 1.0.0.exe` (NSIS installer with custom directory selection)
-- **Unpacked Standalone**: `release/win-unpacked/` (Contains `EchoCRM.exe` and unpacked AI backend)
+- **Windows Installer**: `release/Wavelength Setup 1.0.0.exe` (NSIS installer with custom directory selection)
+- **Unpacked Standalone**: `release/win-unpacked/` (Contains `Wavelength.exe` and unpacked AI backend)
 
 ---
 
 ## AI Setup
 
-EchoCRM uses a 100% offline, local AI processing pipeline:
+Wavelength uses a 100% offline, local AI processing pipeline:
 1. **Ollama Service**:
    - Install Ollama from [ollama.com](https://ollama.com)
    - Pull the required model:
@@ -89,7 +89,7 @@ EchoCRM uses a 100% offline, local AI processing pipeline:
 
 ## Environment Configuration
 
-EchoCRM requires connection to a Supabase backend for CRM data persistence.
+Wavelength requires connection to a Supabase backend for CRM data persistence.
 
 1. Copy the example configuration template:
    ```powershell
@@ -123,8 +123,8 @@ user. Realtime is enabled for live sync across the app.
 
 1. Open `chrome://extensions`.
 2. Enable **Developer mode** (top-right).
-3. Click **Load unpacked** and select the `echocrm-extension/` folder.
-4. Open the extension popup and **sign in with the same EchoCRM account** used in
+3. Click **Load unpacked** and select the `wavelength-extension/` folder.
+4. Open the extension popup and **sign in with the same Wavelength account** used in
    the desktop app (required for uploads — the storage/table policies are
    owner-scoped).
 5. Join a Google Meet / Zoom / Teams meeting in Chrome and click **Start Recording**.
@@ -185,14 +185,14 @@ See [`ai/README.md`](ai/README.md) for AI-service details and
 ## Project layout
 
 ```
-EchoCRM/
+Wavelength/
 ├── ai/                     # Python FastAPI AI service
 │   ├── analysis/           # prompts, validator, transcript cleaner, LLM providers
 │   ├── pipeline/           # orchestrator: audio → transcript → clean → LLM
 │   ├── transcription/      # faster-whisper wrapper
 │   ├── config/             # settings
 │   └── server.py           # FastAPI app (started by Electron)
-├── echocrm-extension/      # Chrome MV3 extension (capture + upload)
+├── wavelength-extension/      # Chrome MV3 extension (capture + upload)
 ├── src/                    # React + TypeScript desktop UI
 ├── supabase/migrations/    # SQL schema + RLS policies
 ├── main.js / preload.js    # Electron main process + IPC bridge

@@ -9,11 +9,33 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
+const staySignedInStorage = {
+  getItem: (key: string) => {
+    const staySignedIn = localStorage.getItem('wavelength.staySignedIn') !== 'false'
+    return staySignedIn ? window.localStorage.getItem(key) : window.sessionStorage.getItem(key)
+  },
+  setItem: (key: string, value: string) => {
+    const staySignedIn = localStorage.getItem('wavelength.staySignedIn') !== 'false'
+    if (staySignedIn) {
+      window.localStorage.setItem(key, value)
+      window.sessionStorage.removeItem(key)
+    } else {
+      window.sessionStorage.setItem(key, value)
+      window.localStorage.removeItem(key)
+    }
+  },
+  removeItem: (key: string) => {
+    window.localStorage.removeItem(key)
+    window.sessionStorage.removeItem(key)
+  }
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: false // Essential for Electron since it uses file:// protocol instead of Web URLs
+    detectSessionInUrl: false, // Essential for Electron since it uses file:// protocol instead of Web URLs
+    storage: staySignedInStorage
   }
 })
 

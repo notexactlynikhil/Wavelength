@@ -1,5 +1,5 @@
 /**
- * EchoCRM Offscreen Audio Recorder Engine
+ * Wavelength Offscreen Audio Recorder Engine
  * - Captures SALESPERSON_MIC and REMOTE_AUDIO in isolated channels
  * - Controls remote participant WebRTC disclosure injection with verified tracking
  * - Runs real-time SpeakerSegmenter (VAD) generating a structured speaker timeline
@@ -277,7 +277,7 @@ async function stopRecording() {
             if (window.recordingStore) {
               await window.recordingStore.updateRecording(recordingId, {
                 status: 'auth_required',
-                lastError: 'Sign in to the EchoCRM extension to sync this recording.'
+                lastError: 'Sign in to the Wavelength extension to sync this recording.'
               });
             }
             chrome.runtime.sendMessage({ type: 'RECORDING_UPLOAD_FAILED', recordingId, error: 'Not signed in' }).catch(() => {});

@@ -1,6 +1,6 @@
 -- Restrict meeting_recordings to their owner, matching the pattern used by
 -- customers / calls / tasks / deals. The browser extension must now send an
--- authenticated user session (see echocrm-extension/supabase/client.js).
+-- authenticated user session (see wavelength-extension/supabase/client.js).
 
 ALTER TABLE public.meeting_recordings
     ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES public.users(id) ON DELETE SET NULL;

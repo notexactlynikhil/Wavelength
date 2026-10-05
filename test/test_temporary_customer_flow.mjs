@@ -1,5 +1,5 @@
 /**
- * Comprehensive verification tests for EchoCRM's temporary customer architecture.
+ * Comprehensive verification tests for Wavelength's temporary customer architecture.
  *
  * Covers all 10 test requirements specified in the user prompt:
  *   TEST 1  - MANUAL CUSTOMER: Rahul M selected -> No temp customer, customer_id = Rahul M

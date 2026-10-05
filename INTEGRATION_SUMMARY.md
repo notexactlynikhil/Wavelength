@@ -1,8 +1,8 @@
-# EchoCRM Desktop App — AI Backend Integration Summary (Iteration 2)
+# Wavelength Desktop App — AI Backend Integration Summary (Iteration 2)
 
 ## 📌 Executive Overview
 
-In this iteration, we successfully integrated the standalone **Phase 1 Python AI Processing Pipeline** into the **EchoCRM Electron Desktop Application**. 
+In this iteration, we successfully integrated the standalone **Phase 1 Python AI Processing Pipeline** into the **Wavelength Electron Desktop Application**. 
 
 The Electron application now manages a local FastAPI service in the background, communicates with it via IPC in `preload.js`, and exposes a developer action panel inside the React CRM frontend to trigger local audio transcription, LLaMA 3.2 analysis, and structured call report rendering.
 
@@ -95,7 +95,7 @@ The Electron application now manages a local FastAPI service in the background, 
    ollama run llama3.2:3b
    ```
 
-2. Start EchoCRM:
+2. Start Wavelength:
    ```bash
    npm run dev
    ```

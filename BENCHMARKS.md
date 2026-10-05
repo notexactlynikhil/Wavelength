@@ -1,6 +1,6 @@
 # AI Pipeline Benchmarks
 
-Local, offline processing times for the EchoCRM AI pipeline
+Local, offline processing times for the Wavelength AI pipeline
 (`faster-whisper` transcription + LLaMA 3.2 3B summarization via Ollama).
 
 ## Machine

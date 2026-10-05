@@ -22,7 +22,7 @@ from ai.pipeline.orchestrator import CallPipeline
 
 SAMPLE_PATH = os.path.join("test", "sample-audio", "sample.wav")
 OUTPUT_DIR = os.path.join("test", "output")
-BENCH_DIR = os.path.join(tempfile.gettempdir(), "echocrm-bench")
+BENCH_DIR = os.path.join(tempfile.gettempdir(), "wavelength-bench")
 
 
 def make_audio(seconds, out_path):

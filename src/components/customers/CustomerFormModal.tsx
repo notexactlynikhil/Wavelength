@@ -102,26 +102,26 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none animate-fadeIn">
       {/* Backdrop overlay */}
-      <div className="absolute inset-0 bg-[#292522]/40 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-theme-base/80 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
 
       {/* Modal Content container */}
       <div 
-        className="bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl w-full max-w-lg shadow-xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] animate-slideUp"
+        className="bg-theme-surface border border-theme-border rounded-2xl w-full max-w-lg shadow-xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] animate-slideUp"
         role="dialog"
         aria-modal="true"
         aria-labelledby="customer-modal-title"
       >
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#E8E1D8] flex items-center justify-between shrink-0">
-          <h2 id="customer-modal-title" className="text-xl font-bold text-[#292522] font-display">
+        <div className="px-6 py-4 border-b border-theme-border flex items-center justify-between shrink-0">
+          <h2 id="customer-modal-title" className="text-xl font-bold text-theme-text font-display">
             {customer ? 'Edit Customer' : 'Add New Customer'}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 text-[#817A72] hover:text-[#292522] rounded-lg hover:bg-[#F7F4EE] transition"
+            className="p-1.5 text-theme-textMuted hover:text-theme-text rounded-lg hover:bg-theme-base transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -132,19 +132,19 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
           
           {/* Error Message */}
           {validationError && (
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#B94A48]/10 border border-[#B94A48]/20 text-[#B94A48] text-xs animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-[#B94A48] shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs animate-fadeIn">
+              <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
               <span>{validationError}</span>
             </div>
           )}
 
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">
-              Full Name <span className="text-[#B85C38]">*</span>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider">
+              Full Name <span className="text-theme-accent">*</span>
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#817A72]">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted">
                 <User className="w-4.5 h-4.5" />
               </span>
               <input
@@ -154,16 +154,16 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-sm text-[#292522] placeholder-[#817A72]"
+                className="w-full pl-10 pr-4 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-sm text-theme-text placeholder-theme-textMuted"
               />
             </div>
           </div>
 
           {/* Email Address */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Email Address</label>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider">Email Address</label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#817A72]">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted">
                 <Mail className="w-4.5 h-4.5" />
               </span>
               <input
@@ -172,16 +172,16 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-sm text-[#292522] placeholder-[#817A72]"
+                className="w-full pl-10 pr-4 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-sm text-theme-text placeholder-theme-textMuted"
               />
             </div>
           </div>
 
           {/* Phone Number */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Phone Number</label>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider">Phone Number</label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#817A72]">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted">
                 <Phone className="w-4.5 h-4.5" />
               </span>
               <input
@@ -190,16 +190,16 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 disabled={loading}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-sm text-[#292522] placeholder-[#817A72]"
+                className="w-full pl-10 pr-4 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-sm text-theme-text placeholder-theme-textMuted"
               />
             </div>
           </div>
 
           {/* Company / Brokerage */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Company / Brokerage</label>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider">Company / Brokerage</label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#817A72]">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted">
                 <Building2 className="w-4.5 h-4.5" />
               </span>
               <input
@@ -208,18 +208,18 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 disabled={loading}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-sm text-[#292522] placeholder-[#817A72]"
+                className="w-full pl-10 pr-4 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-sm text-theme-text placeholder-theme-textMuted"
               />
             </div>
           </div>
 
           {/* Tags */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">
-              Tags <span className="text-[10px] text-[#817A72]/70 lowercase">(comma separated)</span>
+            <label className="text-xs font-semibold text-theme-textMuted uppercase tracking-wider">
+              Tags <span className="text-[10px] text-theme-textMuted/70 lowercase">(comma separated)</span>
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#817A72]">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted">
                 <Tag className="w-4.5 h-4.5" />
               </span>
               <input
@@ -228,25 +228,25 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={tagsString}
                 onChange={(e) => setTagsString(e.target.value)}
                 disabled={loading}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#FFFDF9] border border-[#E8E1D8] focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/15 focus:outline-none rounded-xl text-sm text-[#292522] placeholder-[#817A72]"
+                className="w-full pl-10 pr-4 py-2.5 bg-theme-surface border border-theme-border focus:border-theme-accent focus:ring-2 focus:ring-theme-accent/15 focus:outline-none rounded-xl text-sm text-theme-text placeholder-theme-textMuted"
               />
             </div>
           </div>
 
           {/* Footer Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-[#E8E1D8]">
+          <div className="flex justify-end gap-3 pt-4 border-t border-theme-border">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-semibold text-[#817A72] hover:text-[#292522] border border-[#E8E1D8] bg-[#FFFDF9] hover:bg-[#F7F4EE] rounded-xl transition"
+              className="px-4 py-2 text-sm font-semibold text-theme-textMuted hover:text-theme-text border border-theme-border bg-theme-surface hover:bg-theme-base rounded-xl transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 bg-[#B85C38] hover:bg-[#a24f2f] text-white rounded-xl text-sm font-semibold shadow-xs transition flex items-center justify-center disabled:opacity-50"
+              className="px-5 py-2 bg-theme-accent hover:bg-theme-accentHover text-white rounded-xl text-sm font-semibold shadow-xs transition flex items-center justify-center disabled:opacity-50"
             >
               {loading ? (
                 <span className="border-2 border-white border-t-transparent w-4 h-4 rounded-full animate-spin" />

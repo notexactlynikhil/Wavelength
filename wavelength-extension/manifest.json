@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "EchoCRM - Meeting Audio Recorder",
+  "name": "Wavelength - Meeting Audio Recorder",
   "version": "1.3.0",
   "description": "High-fidelity sales meeting audio recorder with WebRTC remote participant disclosure injection and real speaker attribution segmentation.",
   "icons": {
@@ -30,7 +30,7 @@
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "EchoCRM Meeting Recorder",
+    "default_title": "Wavelength Meeting Recorder",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

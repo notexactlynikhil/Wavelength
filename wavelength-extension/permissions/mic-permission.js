@@ -1,5 +1,5 @@
 /**
- * EchoCRM Microphone Permission Handler
+ * Wavelength Microphone Permission Handler
  */
 
 document.getElementById('requestBtn').addEventListener('click', async () => {

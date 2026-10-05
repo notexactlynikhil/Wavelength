@@ -172,7 +172,7 @@ function downloadToTempFile(url, filename, redirectCount = 0) {
 
     const baseName = path.basename(filename || `recording-${Date.now()}`).replace(/[^a-zA-Z0-9._-]/g, '_');
     const safeName = baseName.replace(/^\.+/, '') || `recording-${Date.now()}`;
-    const targetDir = path.resolve(os.tmpdir(), 'echocrm-recordings');
+    const targetDir = path.resolve(os.tmpdir(), 'wavelength-recordings');
     const targetPath = path.resolve(targetDir, safeName);
 
     // Enforce that targetPath remains strictly contained within targetDir (anti-path traversal)
@@ -357,7 +357,7 @@ function setupIPCHandlers() {
     if (!Notification.isSupported()) {
       return { success: false, error: 'Notifications are not supported on this system.' };
     }
-    new Notification({ title: title || 'EchoCRM', body: body || '' }).show();
+    new Notification({ title: title || 'Wavelength', body: body || '' }).show();
     return { success: true };
   });
 }
@@ -375,7 +375,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       sandbox: false, // Sandbox set to false so preload can access IPC cleanly
     },
-    title: 'EchoCRM',
+    title: 'Wavelength',
     autoHideMenuBar: true,
     show: false
   });

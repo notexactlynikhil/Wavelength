@@ -1,8 +1,8 @@
-# EchoCRM CRM — Phase 1 AI Backend & Electron Integration Summary
+# Wavelength CRM — Phase 1 AI Backend & Electron Integration Summary
 
 ## 📌 Executive Summary
 
-Phase 1 of the **EchoCRM / Echo CRM AI Processing Pipeline** has been built and integrated into the desktop application:
+Phase 1 of the **Wavelength / Wavelength AI Processing Pipeline** has been built and integrated into the desktop application:
 
 ```text
                ECHOCRM ELECTRON CLIENT
@@ -40,7 +40,7 @@ Phase 1 of the **EchoCRM / Echo CRM AI Processing Pipeline** has been built and 
 ## 🏗️ Created & Modified Files
 
 ```text
-EchoCRM/
+Wavelength/
 ├── ai/
 │   ├── config/
 │   │   └── settings.py          # Centralized configuration & CRM enums matching TypeScript types
@@ -105,7 +105,7 @@ EchoCRM/
 
 1. **Standalone Test**: `python test_pipeline.py` executes successfully and generates `test/output/result.json`.
 2. **AI Service API**: `GET http://127.0.0.1:8000/health` returns `status: "ok"`.
-3. **Desktop App Bridge**: Launching EchoCRM Electron application starts the local Python AI process, checks health status, and allows triggering sample call processing directly from the UI.
+3. **Desktop App Bridge**: Launching Wavelength Electron application starts the local Python AI process, checks health status, and allows triggering sample call processing directly from the UI.
 4. **Scope Restrictions**:
    - No database insertion into Supabase (kept client-side & in IPC).
    - No microphone recording or speaker diarization added.

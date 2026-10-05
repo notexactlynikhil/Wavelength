@@ -1,7 +1,7 @@
 """
-Customer information extraction prompts for EchoCRM AI pipeline.
+Customer information extraction prompts for Wavelength AI pipeline.
 
-Extracts customer fields (name, phone, email, company) matching EchoCRM's Customer schema.
+Extracts customer fields (name, phone, email, company) matching Wavelength's Customer schema.
 This is ONLY used when no customer_id was manually supplied (Path B).
 """
 

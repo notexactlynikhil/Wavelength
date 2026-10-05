@@ -1,14 +1,14 @@
 {
     "status": "SUCCESS",
     "audio_path": "test\\sample-audio\\sample.wav",
-    "transcript": "Hi, this is Sarah Jenkins calling from APEX Global. I wanted to follow up on our discussion regarding the echocrm enterprise CRM platform. We are looking to deploy this for our sales team of 25 representatives. Overall, we are very excited about the real-time call transcription and automated sentiment tracking features. However, I do have a concern regarding our data migration timeline from Salesforce and whether your team can assist with data import before the end of the month. Could you send over a detailed pricing proposal and schedule a technical demonstration with our IT director for next Tuesday at 10am? If the pricing looks good and migration support is included, we are ready to move forward to contract negotiation.",
+    "transcript": "Hi, this is Sarah Jenkins calling from APEX Global. I wanted to follow up on our discussion regarding the wavelength enterprise CRM platform. We are looking to deploy this for our sales team of 25 representatives. Overall, we are very excited about the real-time call transcription and automated sentiment tracking features. However, I do have a concern regarding our data migration timeline from Salesforce and whether your team can assist with data import before the end of the month. Could you send over a detailed pricing proposal and schedule a technical demonstration with our IT director for next Tuesday at 10am? If the pricing looks good and migration support is included, we are ready to move forward to contract negotiation.",
     "analysis": {
-        "summary": "APEX Global interested in deploying EchoCRM CRM for 25 sales representatives, with concerns about data migration timeline and pricing.",
+        "summary": "APEX Global interested in deploying Wavelength CRM for 25 sales representatives, with concerns about data migration timeline and pricing.",
         "sentiment": "positive",
         "deal_stage": "prospecting",
         "customer_intent": "We are looking to deploy this for our sales team of 25 representatives.",
         "products_discussed": [
-            "echocrm enterprise CRM platform"
+            "wavelength enterprise CRM platform"
         ],
         "action_items": [
             {

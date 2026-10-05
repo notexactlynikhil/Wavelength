@@ -10,11 +10,9 @@ import {
   LogOut, 
   Mic, 
   Search,
-  Sparkles,
-  ChevronRight,
-  Menu,
-  X
+  Sparkles
 } from 'lucide-react'
+import { LambdaLogo } from '../components/LambdaLogo'
 
 export type TabType = 'dashboard' | 'customers' | 'tasks' | 'search' | 'recordings' | 'settings';
 
@@ -31,7 +29,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const { user, signOut } = useAuth()
   const { status: syncStatus } = useRealtimeSync()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   useTaskNotifications()
 
   // Global keyboard shortcut: Cmd+K / Ctrl+K opens transcript search
@@ -41,13 +39,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         e.preventDefault()
         setActiveTab('search')
       }
-      if (e.key === 'Escape' && mobileMenuOpen) {
-        setMobileMenuOpen(false)
+      if (e.key === 'Escape' && profileMenuOpen) {
+        setProfileMenuOpen(false)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [setActiveTab, mobileMenuOpen])
+  }, [setActiveTab, profileMenuOpen])
 
   const navItems = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -73,182 +71,134 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   }
 
   return (
-    <div className="h-screen w-screen flex bg-[#F7F4EE] text-[#292522] overflow-hidden font-sans">
-      {/* Mobile Drawer Backdrop */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-[#292522]/40 backdrop-blur-xs z-40 md:hidden animate-fadeIn"
-          onClick={() => setMobileMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* 1. Left Sidebar (Fixed on Desktop, Slide-over on Mobile) */}
-      <aside 
-        className={`w-64 shrink-0 bg-[#FFFDF9] border-r border-[#E8E1D8] flex flex-col justify-between p-4 z-50 shadow-[1px_0_4px_rgba(41,37,34,0.02)] transition-transform duration-200 ease-in-out fixed inset-y-0 left-0 md:static md:translate-x-0 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
-      >
-        
-        {/* Top: Logo & Navigation */}
-        <div className="space-y-6">
-          {/* Logo Header */}
-          <div className="flex items-center justify-between px-3 py-2">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-[#F0D8CA] text-[#B85C38] flex items-center justify-center font-bold text-base shadow-sm">
-                <Sparkles className="w-4 h-4 fill-[#B85C38]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base font-bold text-[#292522] tracking-tight font-display">EchoCRM</span>
-                  <span className="text-[9px] font-bold uppercase tracking-wider bg-[#FBF3E6] text-[#8C6831] px-1.5 py-0.5 rounded-full border border-[#C59A5F]/20">Pro</span>
-                </div>
-                <p className="text-[11px] text-[#817A72]">Voice &amp; AI Intelligence</p>
-              </div>
+    <div className="h-screen w-screen flex flex-col bg-[#1C1917] text-[#F5F5F4] overflow-hidden font-sans relative">
+      
+      {/* Top Header */}
+      <header className="h-14 shrink-0 bg-[#292522] border-b border-[#44403C] px-4 md:px-8 flex items-center justify-between z-10 shadow-[0_1px_2px_rgba(41,37,34,0.02)]">
+        {/* Left: Logo & Breadcrumbs */}
+        <div className="flex items-center gap-3 select-none">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[#432C24] text-[#E88C64] flex items-center justify-center font-bold text-base shadow-sm">
+              <LambdaLogo className="w-5 h-5 text-[#E88C64]" />
             </div>
-            {/* Mobile close button */}
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-1 text-[#817A72] hover:text-[#292522] md:hidden rounded-lg hover:bg-[#F7F4EE] transition"
-              aria-label="Close menu"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            <span className="text-base font-bold text-[#F5F5F4] tracking-tight font-display hidden sm:block">Wavelength</span>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              const isActive = activeTab === item.id
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id)
-                    setMobileMenuOpen(false)
-                  }}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group relative ${
-                    isActive 
-                      ? 'bg-[#F0D8CA] text-[#B85C38] font-semibold shadow-xs' 
-                      : 'text-[#817A72] hover:text-[#292522] hover:bg-[#F7F4EE]'
+          <div className="hidden sm:flex items-center gap-2 text-xs font-medium ml-2 border-l border-[#44403C] pl-4">
+            <span className="text-[#A8A29E]">{activeItem.label}</span>
+          </div>
+        </div>
+
+        {/* Right: Quick Actions & Profile */}
+        <div className="flex items-center gap-3">
+          {activeTab !== 'search' && (
+            <button
+              onClick={() => setActiveTab('search')}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1C1917] hover:bg-[#332F2C] text-[#A8A29E] hover:text-[#F5F5F4] text-xs font-medium border border-[#44403C] transition shadow-xs"
+              title="Search call transcripts (Ctrl+K)"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Search transcripts</span>
+              <kbd className="text-[10px] bg-[#292522] px-1.5 py-0.5 rounded border border-[#44403C] text-[#A8A29E]">Ctrl+K</kbd>
+            </button>
+          )}
+
+          <div className="w-px h-5 bg-[#E8E1D8]" />
+
+          {/* User Menu Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+              className="w-7 h-7 rounded-full bg-[#E88C64]/30 text-[#F5F5F5] flex items-center justify-center font-bold text-xs select-none shadow-xs hover:ring-2 ring-[#E88C64]/30 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#E88C64]"
+              title={`${displayName} (${displayEmail})`}
+              aria-haspopup="menu"
+              aria-expanded={profileMenuOpen}
+            >
+              {avatarLetter}
+            </button>
+            
+            {profileMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setProfileMenuOpen(false)} aria-hidden="true" />
+                <div className="absolute right-0 mt-2 w-56 bg-[#292522] border border-[#44403C] rounded-2xl shadow-lg z-50 overflow-hidden animate-fadeIn" role="menu">
+                  <div className="p-3 border-b border-[#44403C]">
+                    <div className="text-sm font-semibold text-[#F5F5F4] truncate">{displayName}</div>
+                    <div className="text-xs text-[#A8A29E] truncate">{displayEmail}</div>
+                  </div>
+                  
+                  <div className="p-2 border-b border-[#44403C] flex items-center justify-between text-xs" role="none">
+                    <span className="text-[#A8A29E] font-medium px-1">Sync State</span>
+                    <div className="flex items-center gap-1.5 px-1">
+                      <span className={`w-2 h-2 rounded-full ${
+                        syncStatus === 'connected' ? 'bg-[#64866A]' : syncStatus === 'connecting' ? 'bg-[#C28A3D] animate-pulse' : 'bg-[#EF4444]'
+                      }`} />
+                      <span className={`font-medium ${syncStatus === 'connected' ? 'text-[#64866A]' : 'text-[#A8A29E]'}`}>
+                        {syncStatus === 'connected' ? 'Active' : syncStatus === 'connecting' ? 'Connecting' : 'Offline'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-1" role="none">
+                    <button
+                      role="menuitem"
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#A8A29E] hover:text-[#EF4444] hover:bg-[#3F2222] transition-all outline-none focus-visible:bg-[#1C1917]"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Viewport */}
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 relative min-w-0 bg-[#1C1917]">
+        {/* pb-24 adds safe spacing for the floating pill navigation at the bottom */}
+        <div className="max-w-7xl mx-auto h-full flex flex-col pb-24">
+          {children}
+        </div>
+      </main>
+
+      {/* Floating Pill Navigation */}
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <div 
+          className="flex items-center gap-1.5 p-2 bg-[#292522] rounded-full shadow-xl shadow-black/20 border border-[#403B36]"
+          role="tablist"
+          aria-label="Main Navigation"
+        >
+          {navItems.map((item) => {
+            const Icon = item.icon
+            const isActive = activeTab === item.id
+            return (
+              <button
+                key={item.id}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex items-center rounded-full transition-all duration-300 ease-out outline-none focus-visible:ring-2 focus-visible:ring-[#E88C64] ${
+                  isActive 
+                    ? 'bg-[#432C24] text-[#E88C64] px-4 py-2.5 shadow-sm' 
+                    : 'text-[#C5BEB6] hover:text-white hover:bg-[#403B36] p-2.5'
+                }`}
+                title={item.label}
+              >
+                <Icon className={`shrink-0 transition-transform duration-300 ${isActive ? 'w-4.5 h-4.5 scale-105' : 'w-5 h-5'}`} />
+                <span 
+                  className={`overflow-hidden whitespace-nowrap text-sm font-semibold transition-all duration-300 ease-out ${
+                    isActive ? 'ml-2.5 max-w-[150px] opacity-100' : 'max-w-0 opacity-0 ml-0'
                   }`}
                 >
-                  <Icon className={`w-4.5 h-4.5 transition-transform duration-200 group-hover:scale-105 ${
-                    isActive ? 'text-[#B85C38]' : 'text-[#817A72] group-hover:text-[#292522]'
-                  }`} />
-                  <span className="truncate">{item.label}</span>
-                </button>
-              )
-            })}
-          </nav>
-        </div>
-
-        {/* Bottom: Sync, Profile & Logout */}
-        <div className="space-y-3 pt-3 border-t border-[#E8E1D8]">
-          {/* Realtime Status Badge */}
-          <div className="flex items-center justify-between px-2 py-1 select-none text-xs">
-            <span className="text-[#817A72] text-[11px] font-medium">Sync State</span>
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${
-                syncStatus === 'connected' 
-                  ? 'bg-[#64866A]' 
-                  : syncStatus === 'connecting'
-                    ? 'bg-[#C28A3D] animate-pulse'
-                    : 'bg-[#B94A48]'
-              }`} />
-              <span className={`text-[11px] font-medium ${
-                syncStatus === 'connected' ? 'text-[#3D5C43]' : 'text-[#817A72]'
-              }`}>
-                {syncStatus === 'connected' 
-                  ? 'Active' 
-                  : syncStatus === 'connecting'
-                    ? 'Connecting'
-                    : 'Offline'}
-              </span>
-            </div>
-          </div>
-
-          {/* User Profile Card */}
-          <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[#F7F4EE] border border-[#E8E1D8]">
-            <div className="w-8 h-8 rounded-full bg-[#B85C38] text-white flex items-center justify-center font-bold text-xs select-none shadow-xs shrink-0">
-              {avatarLetter}
-            </div>
-            <div className="min-w-0 flex-1 overflow-hidden">
-              <div className="text-xs font-semibold text-[#292522] truncate leading-tight">
-                {displayName}
-              </div>
-              <div className="text-[10px] text-[#817A72] truncate mt-0.5 leading-none">
-                {displayEmail}
-              </div>
-            </div>
-          </div>
-
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#817A72] hover:text-[#B94A48] hover:bg-[#F9ECEC] transition-all duration-150"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* 2. Main Shell (Top Header + Content Area) */}
-      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
-        {/* Top Header */}
-        <header className="h-14 shrink-0 bg-[#FFFDF9] border-b border-[#E8E1D8] px-4 md:px-8 flex items-center justify-between z-10 shadow-[0_1px_2px_rgba(41,37,34,0.02)]">
-          {/* Left: Mobile Menu Toggle + Breadcrumbs */}
-          <div className="flex items-center gap-3 select-none">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 rounded-lg text-[#817A72] hover:text-[#292522] hover:bg-[#F7F4EE] md:hidden transition"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-
-            <div className="flex items-center gap-2 text-xs font-medium">
-              <span className="text-[#817A72]">EchoCRM</span>
-              <ChevronRight className="w-3.5 h-3.5 text-[#CFC8BE]" />
-              <span className="text-[#292522] font-semibold font-display">{activeItem.label}</span>
-            </div>
-          </div>
-
-          {/* Right: Quick Actions */}
-          <div className="flex items-center gap-3">
-            {activeTab !== 'search' && (
-              <button
-                onClick={() => setActiveTab('search')}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F7F4EE] hover:bg-[#EFEAE0] text-[#817A72] hover:text-[#292522] text-xs font-medium border border-[#E8E1D8] transition shadow-xs"
-                title="Search call transcripts (⌘K or Ctrl+K)"
-              >
-                <Search className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Search transcripts</span>
-                <kbd className="text-[10px] bg-[#FFFDF9] px-1.5 py-0.5 rounded border border-[#E8E1D8] text-[#817A72]">⌘K</kbd>
+                  {item.label}
+                </span>
               </button>
-            )}
-
-            <div className="w-px h-5 bg-[#E8E1D8]" />
-
-            {/* Quick Profile Initials Icon */}
-            <div 
-              className="w-7 h-7 rounded-full bg-[#F0D8CA] text-[#B85C38] flex items-center justify-center font-bold text-xs select-none shadow-xs"
-              title={`${displayName} (${displayEmail})`}
-            >
-              {avatarLetter}
-            </div>
-          </div>
-        </header>
-
-        {/* 3. Main Content Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 relative min-w-0 bg-[#F7F4EE]">
-          <div className="max-w-7xl mx-auto h-full flex flex-col">
-            {children}
-          </div>
-        </main>
-      </div>
+            )
+          })}
+        </div>
+      </nav>
     </div>
   )
 }

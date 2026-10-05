@@ -1,5 +1,5 @@
 /**
- * EchoCRM Background Service Worker (Manifest V3 - Phase 1 + Phase 2)
+ * Wavelength Background Service Worker (Manifest V3 - Phase 1 + Phase 2)
  * Coordinates tab capture, offscreen lifecycle, badge status, and crash resilience.
  */
 

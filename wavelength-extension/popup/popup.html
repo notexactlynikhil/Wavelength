@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoCRM Meeting Recorder</title>
+  <title>Wavelength Meeting Recorder</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
           </svg>
         </div>
         <div class="brand-text">
-          <h1>EchoCRM</h1>
+          <h1>Wavelength</h1>
           <span class="version-tag">Extension v1.4</span>
         </div>
       </div>
@@ -40,6 +40,10 @@
         <div class="cloud-form">
           <input id="cloudEmail" type="email" placeholder="Email" autocomplete="username" />
           <input id="cloudPassword" type="password" placeholder="Password" autocomplete="current-password" />
+          <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px; margin-bottom: 8px; font-size: 11px;">
+            <input type="checkbox" id="cloudStaySignedIn" checked style="margin: 0; cursor: pointer;" />
+            <label for="cloudStaySignedIn" style="cursor: pointer; color: #817A72; user-select: none;">Stay signed in</label>
+          </div>
           <button id="cloudSignInBtn" class="secondary-btn">Sign in to sync</button>
         </div>
         <div id="cloudAuthError" class="auth-error hidden"></div>

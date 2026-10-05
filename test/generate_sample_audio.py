@@ -6,7 +6,7 @@ os.makedirs(SAMPLE_DIR, exist_ok=True)
 
 SAMPLE_TEXT = (
     "Hi, this is Sarah Jenkins calling from Apex Global. "
-    "I wanted to follow up on our discussion regarding the EchoCRM Enterprise CRM platform. "
+    "I wanted to follow up on our discussion regarding the Wavelength Enterprise CRM platform. "
     "We are looking to deploy this for our sales team of 25 representatives. "
     "Overall, we are very excited about the real-time call transcription and automated sentiment tracking features. "
     "However, I do have a concern regarding our data migration timeline from Salesforce "

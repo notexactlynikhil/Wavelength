@@ -1,5 +1,5 @@
 /**
- * EchoCRM Chrome Extension - Example Local Configuration
+ * Wavelength Chrome Extension - Example Local Configuration
  * 
  * In development, copy this file to 'config.local.js' (which is gitignored)
  * or run:
@@ -8,9 +8,9 @@
  *
  * In production, this can also be configured dynamically at runtime
  * via chrome.storage.local keys:
- *   - 'echocrm_supabase_url'
- *   - 'echocrm_supabase_anon_key'
- *   - 'echocrm_supabase_bucket'
+ *   - 'wavelength_supabase_url'
+ *   - 'wavelength_supabase_anon_key'
+ *   - 'wavelength_supabase_bucket'
  */
 
 globalThis.__ECHOCRM_CONFIG__ = {

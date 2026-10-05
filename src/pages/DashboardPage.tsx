@@ -30,6 +30,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [loading, setLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [showGraph, setShowGraph] = useState(() => localStorage.getItem('wavelength.showGraph') !== 'false')
 
   const loadData = async (silent = false) => {
     if (!silent) setLoading(true)
@@ -51,6 +52,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   useEffect(() => {
     loadData()
+    
+    const handleGraphToggle = () => {
+      setShowGraph(localStorage.getItem('wavelength.showGraph') !== 'false')
+    }
+    window.addEventListener('wavelength-graph-toggled', handleGraphToggle)
+    return () => window.removeEventListener('wavelength-graph-toggled', handleGraphToggle)
   }, [])
 
   const handleRefresh = () => {
@@ -85,7 +92,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* KPI Skeletons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl p-5 space-y-3">
+            <div key={i} className="h-32 bg-[#292522] border border-[#44403C] rounded-2xl p-5 space-y-3">
               <div className="h-4 w-24 bg-[#E8E1D8] rounded"></div>
               <div className="h-8 w-16 bg-[#E8E1D8] rounded-lg"></div>
             </div>
@@ -94,8 +101,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         {/* Charts Skeleton */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="h-64 bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl"></div>
-          <div className="h-64 bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl"></div>
+          <div className="h-64 bg-[#292522] border border-[#44403C] rounded-2xl"></div>
+          <div className="h-64 bg-[#292522] border border-[#44403C] rounded-2xl"></div>
         </div>
       </div>
     )
@@ -106,10 +113,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       {/* 1. Header with Greeting and Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
         <div>
-          <h1 className="text-2xl font-bold text-[#292522] tracking-tight font-display">
+          <h1 className="text-2xl font-bold text-[#F5F5F4] tracking-tight font-display">
             Good day, {userName}
           </h1>
-          <p className="text-xs text-[#817A72] mt-0.5">
+          <p className="text-xs text-[#A8A29E] mt-0.5">
             Here is your live real estate sales overview &amp; pipeline status.
           </p>
         </div>
@@ -120,10 +127,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             onClick={handleRefresh}
             disabled={isRefreshing}
             aria-label="Refresh Dashboard"
-            className="flex items-center gap-2 px-3.5 py-2 bg-[#FFFDF9] hover:bg-[#F7F4EE] border border-[#E8E1D8] text-[#292522] rounded-xl text-xs font-semibold transition active:scale-95 shadow-xs disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-2 bg-[#292522] hover:bg-[#1C1917] border border-[#44403C] text-[#F5F5F4] rounded-xl text-xs font-semibold transition active:scale-95 shadow-xs disabled:opacity-50"
             title="Refresh Dashboard"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-[#B85C38] ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-[#E88C64] ${isRefreshing ? 'animate-spin' : ''}`} />
             <span>{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
           </button>
         </div>
@@ -131,8 +138,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
       {/* 2. Error Message Notice */}
       {errorMsg && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-[#F9ECEC] border border-[#B94A48]/30 text-[#8D2F2E] text-xs">
-          <AlertCircle className="w-4 h-4 text-[#B94A48] shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-[#3F2222] border border-[#B94A48]/30 text-[#8D2F2E] text-xs">
+          <AlertCircle className="w-4 h-4 text-[#EF4444] shrink-0 mt-0.5" />
           <div className="flex-1">
             <span className="font-semibold">Unable to load all CRM data: </span>
             <span>{errorMsg}</span>
@@ -145,19 +152,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* KPI 1: Customers */}
         <div 
           onClick={onNavigateToCustomers}
-          className="bg-[#FFFDF9] border border-[#E8E1D8] hover:border-[#D8CEBF] rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] hover:shadow-[0_4px_16px_rgba(41,37,34,0.06)] transition-all duration-200 cursor-pointer group flex flex-col justify-between"
+          className="bg-[#292522] border border-[#44403C] hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:-translate-y-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88C64]/30 rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] transition-all duration-200 cursor-pointer group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Total Customers</span>
-            <div className="w-8 h-8 rounded-xl bg-[#FAF3EF] text-[#B85C38] flex items-center justify-center transition-transform group-hover:scale-105">
+            <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wider">Total Customers</span>
+            <div className="w-8 h-8 rounded-xl bg-[#432C24] text-[#E88C64] flex items-center justify-center transition-transform group-hover:scale-105">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-[#B85C38] tracking-tight">
+            <div className="text-3xl font-extrabold text-[#E88C64] tracking-tight">
               {data?.stats.totalCustomers || 0}
             </div>
-            <span className="flex items-center text-xs font-medium text-[#817A72] group-hover:text-[#B85C38] transition">
+            <span className="flex items-center text-xs font-medium text-[#A8A29E] group-hover:text-[#E88C64] transition">
               View all <ArrowUpRight className="w-3 h-3 ml-0.5" />
             </span>
           </div>
@@ -166,34 +173,34 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* KPI 2: Pending Tasks */}
         <div 
           onClick={onNavigateToTasks}
-          className="bg-[#FFFDF9] border border-[#E8E1D8] hover:border-[#D8CEBF] rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] hover:shadow-[0_4px_16px_rgba(41,37,34,0.06)] transition-all duration-200 cursor-pointer group flex flex-col justify-between"
+          className="bg-[#292522] border border-[#44403C] hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:-translate-y-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88C64]/30 rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] transition-all duration-200 cursor-pointer group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Pending Tasks</span>
-            <div className="w-8 h-8 rounded-xl bg-[#EBF1EC] text-[#64866A] flex items-center justify-center transition-transform group-hover:scale-105">
+            <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wider">Pending Tasks</span>
+            <div className="w-8 h-8 rounded-xl bg-[#432C24] text-[#E88C64] flex items-center justify-center transition-transform group-hover:scale-105">
               <CheckSquare className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-[#292522] tracking-tight">
+            <div className="text-3xl font-extrabold text-[#F5F5F4] tracking-tight">
               {data?.stats.pendingTasksCount || 0}
             </div>
-            <span className="flex items-center text-xs font-medium text-[#817A72] group-hover:text-[#B85C38] transition">
+            <span className="flex items-center text-xs font-medium text-[#A8A29E] group-hover:text-[#E88C64] transition">
               Manage <ArrowUpRight className="w-3 h-3 ml-0.5" />
             </span>
           </div>
         </div>
 
         {/* KPI 3: Calls Today */}
-        <div className="bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] flex flex-col justify-between">
+        <div className="bg-[#292522] border border-[#44403C] rounded-2xl p-5 shadow-[0_1px_3px_rgba(41,37,34,0.03)] flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#817A72] uppercase tracking-wider">Calls Today</span>
-            <div className="w-8 h-8 rounded-xl bg-[#FAF3EF] text-[#B85C38] flex items-center justify-center">
+            <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wider">Calls Today</span>
+            <div className="w-8 h-8 rounded-xl bg-[#432C24] text-[#E88C64] flex items-center justify-center">
               <PhoneCall className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-[#292522] tracking-tight">
+            <div className="text-3xl font-extrabold text-[#F5F5F4] tracking-tight">
               {data?.stats.todayCallsCount || 0}
             </div>
             <span className="text-xs font-semibold text-[#64866A]">
@@ -204,23 +211,23 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       </div>
 
       {/* 4. Visual Charts - Call Activity only */}
-      <DashboardCharts callsPerDay={callsPerDay} />
+      {showGraph && <DashboardCharts callsPerDay={callsPerDay} />}
 
       {/* 5. Split Bottom Section: Recent Customers & Pending Tasks */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Customers Panel */}
-        <div className="bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl p-6 shadow-[0_1px_3px_rgba(41,37,34,0.03)] space-y-4">
+        <div className="bg-[#292522] border border-[#44403C] rounded-2xl p-6 shadow-[0_1px_3px_rgba(41,37,34,0.03)] space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-[#FAF3EF] text-[#B85C38] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#432C24] text-[#E88C64] flex items-center justify-center">
                 <Users className="w-4 h-4" />
               </div>
-              <h2 className="text-sm font-bold text-[#292522]">Recent Customers</h2>
+              <h2 className="text-sm font-bold text-[#F5F5F4]">Recent Customers</h2>
             </div>
             {onNavigateToCustomers && (
               <button 
                 onClick={onNavigateToCustomers}
-                className="text-xs font-semibold text-[#B85C38] hover:text-[#A14F2E] flex items-center gap-1 transition"
+                className="text-xs font-semibold text-[#E88C64] hover:text-[#A14F2E] flex items-center gap-1 transition"
               >
                 <span>View all</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -229,22 +236,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
 
           {!data?.recentCustomers || data.recentCustomers.length === 0 ? (
-            <div className="py-10 text-center border border-dashed border-[#E8E1D8] rounded-xl bg-[#F7F4EE]/50">
-              <p className="text-xs text-[#817A72]">No customers registered yet.</p>
+            <div className="py-10 text-center border border-dashed border-[#44403C] rounded-xl bg-[#1C1917]/50">
+              <p className="text-xs text-[#A8A29E]">No customers registered yet.</p>
             </div>
           ) : (
-            <div className="divide-y divide-[#E8E1D8]">
+            <div className="divide-y divide-[#44403C]">
               {data.recentCustomers.slice(0, 5).map((cust) => (
                 <div key={cust.id} className="py-3 flex items-center justify-between gap-4 group">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-[#F0D8CA] text-[#B85C38] font-bold text-xs flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-[#E88C64]/30 text-[#F5F5F5] font-bold text-xs flex items-center justify-center shrink-0">
                       {cust.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs font-bold text-[#292522] truncate group-hover:text-[#B85C38] transition">
+                      <div className="text-xs font-bold text-[#F5F5F4] truncate group-hover:text-[#E88C64] transition">
                         {cust.name}
                       </div>
-                      <div className="flex items-center gap-2 text-[11px] text-[#817A72] mt-0.5 truncate">
+                      <div className="flex items-center gap-2 text-[11px] text-[#A8A29E] mt-0.5 truncate">
                         {cust.company && (
                           <span className="flex items-center gap-1">
                             <Building2 className="w-3 h-3" />
@@ -275,18 +282,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
 
         {/* Pending Tasks Panel */}
-        <div className="bg-[#FFFDF9] border border-[#E8E1D8] rounded-2xl p-6 shadow-[0_1px_3px_rgba(41,37,34,0.03)] space-y-4">
+        <div className="bg-[#292522] border border-[#44403C] rounded-2xl p-6 shadow-[0_1px_3px_rgba(41,37,34,0.03)] space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-[#EBF1EC] text-[#64866A] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#432C24] text-[#E88C64] flex items-center justify-center">
                 <CheckSquare className="w-4 h-4" />
               </div>
-              <h2 className="text-sm font-bold text-[#292522]">Pending Action Items</h2>
+              <h2 className="text-sm font-bold text-[#F5F5F4]">Pending Action Items</h2>
             </div>
             {onNavigateToTasks && (
               <button 
                 onClick={onNavigateToTasks}
-                className="text-xs font-semibold text-[#B85C38] hover:text-[#A14F2E] flex items-center gap-1 transition"
+                className="text-xs font-semibold text-[#E88C64] hover:text-[#A14F2E] flex items-center gap-1 transition"
               >
                 <span>View all</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -295,18 +302,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
 
           {!data?.pendingTasks || data.pendingTasks.length === 0 ? (
-            <div className="py-10 text-center border border-dashed border-[#E8E1D8] rounded-xl bg-[#F7F4EE]/50">
-              <p className="text-xs text-[#817A72]">All tasks completed. You're caught up!</p>
+            <div className="py-10 text-center border border-dashed border-[#44403C] rounded-xl bg-[#1C1917]/50">
+              <p className="text-xs text-[#A8A29E]">All tasks completed. You're caught up!</p>
             </div>
           ) : (
-            <div className="divide-y divide-[#E8E1D8]">
+            <div className="divide-y divide-[#44403C]">
               {data.pendingTasks.slice(0, 5).map((task) => (
                 <div key={task.id} className="py-3 flex items-start justify-between gap-4">
                   <div className="space-y-1 min-w-0">
-                    <p className="text-xs font-medium text-[#292522] leading-snug line-clamp-2">
+                    <p className="text-xs font-medium text-[#F5F5F4] leading-snug line-clamp-2">
                       {task.description}
                     </p>
-                    <div className="flex items-center gap-2 text-[10px] text-[#817A72]">
+                    <div className="flex items-center gap-2 text-[10px] text-[#A8A29E]">
                       <Calendar className="w-3 h-3 text-[#C59A5F]" />
                       <span>{formatDate(task.due_date)}</span>
                     </div>
