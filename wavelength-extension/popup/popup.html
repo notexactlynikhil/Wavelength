@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wavelength Meeting Recorder</title>
+  <title>Wavelength</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="app-container">
-    <!-- Header -->
+
+    <!-- ── HEADER ─────────────────────────────────────── -->
     <header class="app-header">
       <div class="brand">
+        <!-- Lambda λ logo — matches main app exactly -->
         <div class="brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M17 5v14M7 5v14M22 10v4M2 10v4" />
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 20L10 4L14 12L18 8L20 20" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="brand-text">
@@ -21,321 +26,308 @@
           <span class="version-tag">Extension v1.4</span>
         </div>
       </div>
-      <div id="liveBadge" class="status-pill idle">IDLE</div>
+      <div id="liveBadge" class="status-badge idle">IDLE</div>
     </header>
 
-    <!-- Alert Banner -->
+    <!-- ── ALERT BANNER ───────────────────────────────── -->
     <div id="alertBanner" class="alert-banner hidden">
       <span id="alertText"></span>
       <button id="alertCloseBtn" class="alert-close">&times;</button>
     </div>
 
-    <!-- CLOUD SYNC / ACCOUNT -->
-    <div class="card cloud-card">
+    <!-- ── CLOUD SYNC / ACCOUNT ───────────────────────── -->
+    <div class="card">
       <div class="card-header">
         <span class="card-label">Cloud Sync</span>
-        <span id="cloudStatusBadge" class="platform-badge unverified">CHECKING</span>
+        <span id="cloudStatusBadge" class="status-tag neutral">CHECKING</span>
       </div>
       <div id="cloudSignedOut">
-        <div class="cloud-form">
+        <div class="form-stack">
           <input id="cloudEmail" type="email" placeholder="Email" autocomplete="username" />
           <input id="cloudPassword" type="password" placeholder="Password" autocomplete="current-password" />
-          <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px; margin-bottom: 8px; font-size: 11px;">
-            <input type="checkbox" id="cloudStaySignedIn" checked style="margin: 0; cursor: pointer;" />
-            <label for="cloudStaySignedIn" style="cursor: pointer; color: #817A72; user-select: none;">Stay signed in</label>
+          <div class="checkbox-row">
+            <input type="checkbox" id="cloudStaySignedIn" checked />
+            <label for="cloudStaySignedIn">Stay signed in</label>
           </div>
-          <button id="cloudSignInBtn" class="secondary-btn">Sign in to sync</button>
+          <button id="cloudSignInBtn" class="btn-primary">Sign in to sync</button>
         </div>
-        <div id="cloudAuthError" class="auth-error hidden"></div>
+        <div id="cloudAuthError" class="error-msg hidden"></div>
       </div>
       <div id="cloudSignedIn" class="hidden">
-        <div class="cloud-user">Signed in as <span id="cloudUserEmail"></span></div>
-        <button id="cloudSignOutBtn" class="link-btn">Sign out</button>
+        <div class="signed-in-row">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+          <span id="cloudUserEmail" class="user-email"></span>
+        </div>
+        <button id="cloudSignOutBtn" class="btn-ghost">Sign out</button>
       </div>
     </div>
 
-    <!-- IDLE VIEW: Ready to Record -->
+    <!-- ── IDLE VIEW ──────────────────────────────────── -->
     <section id="idleView" class="view-panel">
-      <!-- Target Platform Detection Card -->
-      <div class="card platform-card">
+
+      <!-- Meeting target detection -->
+      <div class="card">
         <div class="card-header">
           <span class="card-label">Meeting Target</span>
-          <span id="detectedPlatformBadge" class="platform-badge unverified">Scanning...</span>
+          <span id="detectedPlatformBadge" class="status-tag neutral">Scanning…</span>
         </div>
         <div class="platform-details">
-          <div class="platform-title" id="meetingTitle">Scanning active tab...</div>
-          <div class="platform-url" id="meetingUrl">-</div>
+          <div class="platform-title" id="meetingTitle">Scanning active tab…</div>
+          <div class="platform-url" id="meetingUrl">—</div>
         </div>
       </div>
 
-      <!-- Customer Card -->
-      <div class="card customer-card" id="customerCard">
+      <!-- Customer -->
+      <div class="card" id="customerCard">
         <div class="card-header">
           <span class="card-label">Customer</span>
-          <span id="selectedCustomerBadge" class="platform-badge unverified">Not selected</span>
+          <span id="selectedCustomerBadge" class="status-tag neutral">Not selected</span>
         </div>
 
-        <!-- Search existing customer -->
-        <div class="customer-search-row">
-          <input
-            id="customerSearchInput"
-            type="text"
-            placeholder="Search customer by name..."
-            autocomplete="off"
-          />
-          <button id="clearCustomerBtn" class="link-btn hidden">Clear</button>
+        <div class="search-row">
+          <input id="customerSearchInput" type="text" placeholder="Search customer…" autocomplete="off" />
+          <button id="clearCustomerBtn" class="btn-ghost hidden">Clear</button>
         </div>
-        <div id="customerSearchResults" class="customer-results hidden"></div>
+        <div id="customerSearchResults" class="search-results hidden"></div>
 
-        <!-- Selected customer display -->
-        <div id="selectedCustomerDisplay" class="selected-customer hidden">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        <div id="selectedCustomerDisplay" class="selected-chip hidden">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
           </svg>
           <span id="selectedCustomerName"></span>
         </div>
 
-        <!-- Add new customer toggle -->
-        <button id="addCustomerBtn" class="link-btn" style="font-size:11px; margin-top:4px;">
-          + Add New Customer
-        </button>
+        <button id="addCustomerBtn" class="btn-ghost add-link">+ Add New Customer</button>
 
-        <!-- Add Customer inline form -->
-        <div id="addCustomerForm" class="add-customer-form hidden">
-          <div class="form-field">
+        <!-- Inline add form -->
+        <div id="addCustomerForm" class="form-stack form-divider hidden">
+          <div class="field-group">
             <label>Full Name <span class="required">*</span></label>
             <input id="newCustName" type="text" placeholder="Jane Doe" />
           </div>
-          <div class="form-field">
+          <div class="field-group">
             <label>Email</label>
             <input id="newCustEmail" type="email" placeholder="jane@company.com" />
           </div>
-          <div class="form-field">
+          <div class="field-group">
             <label>Phone</label>
             <input id="newCustPhone" type="tel" placeholder="555-0199" />
           </div>
-          <div class="form-field">
+          <div class="field-group">
             <label>Company</label>
             <input id="newCustCompany" type="text" placeholder="Acme Corp" />
           </div>
-          <div class="form-row">
-            <button id="cancelAddCustomerBtn" class="secondary-btn" style="flex:1">Cancel</button>
-            <button id="saveNewCustomerBtn" class="primary-btn" style="flex:1; padding: 6px 12px; font-size:12px;">Save Customer</button>
+          <div class="row-2">
+            <button id="cancelAddCustomerBtn" class="btn-secondary" style="flex:1">Cancel</button>
+            <button id="saveNewCustomerBtn" class="btn-primary" style="flex:1">Save Customer</button>
           </div>
-          <div id="addCustomerError" class="auth-error hidden"></div>
+          <div id="addCustomerError" class="error-msg hidden"></div>
         </div>
       </div>
 
-      <!-- Customer Disclosure Injection Status Card -->
-      <div class="card disclosure-card">
+      <!-- Disclosure -->
+      <div class="card card-dim">
         <div class="card-header">
-          <span class="card-label">Remote Customer Disclosure</span>
-          <span id="injectorBadge" class="disclosure-badge checking">CHECKING WEBRTC</span>
+          <span class="card-label">Remote Disclosure</span>
+          <span id="injectorBadge" class="status-tag warning">CHECKING</span>
         </div>
-        <div class="disclosure-text">
-          Automatic disclosure prompt:
-          <em>"This call is being recorded for quality and training purposes."</em>
-          <div id="injectorTip" class="injector-tip">
-            Will inject directly into meeting WebRTC audio track so remote participants hear it.
-          </div>
+        <p class="body-text">
+          Automatic prompt: <em>"This call is being recorded for quality and training purposes."</em>
+        </p>
+        <div id="injectorTip" class="tip-text">
+          Will inject into meeting WebRTC audio so remote participants hear it.
         </div>
-        <div class="disclosure-actions">
-          <button id="copyNoticeBtn" class="secondary-btn" title="Copy text notice to clipboard">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        <div class="row-actions">
+          <button id="copyNoticeBtn" class="btn-secondary">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
-            Copy notice text
+            Copy notice
           </button>
-          <span id="copyToast" class="toast hidden">Copied!</span>
+          <span id="copyToast" class="toast-inline hidden">Copied!</span>
         </div>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Start recording -->
       <div class="action-section">
-        <button id="startRecordBtn" class="primary-btn start-btn">
-          <div class="btn-rec-dot"></div>
+        <button id="startRecordBtn" class="btn-record-start">
+          <span class="rec-dot"></span>
           Start Recording
         </button>
-        <button id="micPermissionBtn" class="link-btn hidden">
-          Need microphone permission? Click here
-        </button>
+        <button id="micPermissionBtn" class="btn-ghost hidden">Need microphone permission?</button>
       </div>
 
-      <!-- Audio File Upload Section -->
-      <div class="card upload-card">
+      <!-- Upload -->
+      <div class="card">
         <div class="card-header">
           <span class="card-label">Upload Audio File</span>
         </div>
-        <p class="upload-hint">Upload an existing call recording (MP3, WAV, M4A, WebM, etc.)</p>
-
-        <!-- File picker trigger -->
-        <div class="upload-row">
+        <p class="body-text">MP3, WAV, M4A, WebM, FLAC supported</p>
+        <div class="row-actions" style="margin-top: 8px;">
           <input id="audioFileInput" type="file" accept=".mp3,.wav,.m4a,.webm,.flac,.ogg,.aac,.wma" style="display:none;" />
-          <button id="selectAudioFileBtn" class="secondary-btn">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+          <button id="selectAudioFileBtn" class="btn-secondary">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
             </svg>
-            Select Audio File
+            Select File
           </button>
         </div>
 
-        <!-- Upload confirmation panel (hidden until file selected) -->
         <div id="uploadConfirmPanel" class="upload-confirm hidden">
-          <div class="upload-confirm-title">Upload Call Recording</div>
-          <div class="upload-confirm-row">
-            <span class="upload-label">File:</span>
-            <span id="uploadFileName" class="upload-value"></span>
+          <div class="upload-meta-row">
+            <span class="meta-label">File</span>
+            <span id="uploadFileName" class="meta-value"></span>
           </div>
-          <div class="upload-confirm-row">
-            <span class="upload-label">Customer:</span>
-            <span id="uploadCustomerName" class="upload-value">Not selected (AI will identify)</span>
+          <div class="upload-meta-row">
+            <span class="meta-label">Customer</span>
+            <span id="uploadCustomerName" class="meta-value dim">Not selected (AI will identify)</span>
           </div>
-          <div class="upload-confirm-row">
-            <button id="changeUploadCustomerBtn" class="link-btn" style="font-size:11px;">Change Customer</button>
-          </div>
-          <div class="form-row" style="margin-top:8px;">
-            <button id="cancelUploadBtn" class="secondary-btn" style="flex:1">Cancel</button>
-            <button id="confirmUploadBtn" class="primary-btn" style="flex:1; padding:6px 12px; font-size:12px;">
-              Upload & Process
-            </button>
+          <button id="changeUploadCustomerBtn" class="btn-ghost" style="font-size:11px; margin-top:2px;">Change Customer</button>
+          <div class="row-2" style="margin-top:10px;">
+            <button id="cancelUploadBtn" class="btn-secondary" style="flex:1">Cancel</button>
+            <button id="confirmUploadBtn" class="btn-primary" style="flex:1">Upload &amp; Process</button>
           </div>
           <div id="uploadProgress" class="upload-progress hidden">
-            <div class="progress-bar-track">
-              <div id="uploadProgressBar" class="progress-bar-fill" style="width:0%"></div>
+            <div class="progress-track">
+              <div id="uploadProgressBar" class="progress-fill" style="width:0%"></div>
             </div>
-            <span id="uploadProgressLabel">Uploading...</span>
+            <span id="uploadProgressLabel" class="body-text">Uploading…</span>
           </div>
         </div>
       </div>
+
     </section>
 
-    <!-- RECORDING ACTIVE VIEW -->
+    <!-- ── RECORDING ACTIVE VIEW ───────────────────────── -->
     <section id="recordingView" class="view-panel hidden">
-      <div class="card recording-card">
-        <div class="recording-indicator">
-          <div class="pulse-ring"></div>
-          <div class="solid-dot"></div>
-        </div>
-        <div class="recording-timer" id="recordingTimer">00:00:00</div>
-        <div class="recording-meta">
-          <span id="recPlatformName" class="badge">Google Meet</span>
-          <span id="currentSpeakerBadge" class="badge speaker-badge">SILENCE</span>
+      <div class="card card-recording">
+
+        <!-- Waveform visualiser -->
+        <div class="waveform">
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
         </div>
 
-        <!-- Real-Time Audio Sources & Voice Activity Detection (VAD) -->
-        <div class="audio-monitor">
-          <!-- Source A: Salesperson Mic -->
-          <div class="monitor-block">
-            <div class="monitor-row">
-              <span class="monitor-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="rec-timer" id="recordingTimer">00:00:00</div>
+
+        <div class="rec-meta-row">
+          <span id="recPlatformName" class="status-tag success">Google Meet</span>
+          <span id="currentSpeakerBadge" class="status-tag neutral">SILENCE</span>
+        </div>
+
+        <!-- Audio channel meters -->
+        <div class="meters">
+          <div class="meter-block">
+            <div class="meter-header">
+              <span class="meter-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15a3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3v6a3 3 0 003 3z"/>
                 </svg>
-                SALESPERSON_MIC (Ch 1)
+                MIC (Ch 1)
               </span>
-              <span id="micVadStatus" class="vad-tag inactive">IDLE</span>
+              <span id="micVadStatus" class="vad-tag off">IDLE</span>
             </div>
-            <div class="meter-bar-track">
-              <div id="micMeterBar" class="meter-bar-fill" style="width: 0%;"></div>
+            <div class="meter-track">
+              <div id="micMeterBar" class="meter-fill" style="width:0%"></div>
             </div>
           </div>
-
-          <!-- Source B: Remote Tab Audio -->
-          <div class="monitor-block">
-            <div class="monitor-row">
-              <span class="monitor-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div class="meter-block">
+            <div class="meter-header">
+              <span class="meter-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
                   <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
                 </svg>
-                REMOTE_AUDIO (Ch 2)
+                REMOTE (Ch 2)
               </span>
-              <span id="remoteVadStatus" class="vad-tag inactive">IDLE</span>
+              <span id="remoteVadStatus" class="vad-tag off">IDLE</span>
             </div>
-            <div class="meter-bar-track">
-              <div id="remoteMeterBar" class="meter-bar-fill" style="width: 0%;"></div>
+            <div class="meter-track">
+              <div id="remoteMeterBar" class="meter-fill" style="width:0%"></div>
             </div>
           </div>
+        </div>
 
-          <!-- Distinct Disclosure Delivery Status -->
-          <div class="disclosure-monitor-section">
-            <div class="monitor-row-compact">
-              <span class="compact-label">Local Disclosure:</span>
-              <span id="localDisclosureBadge" class="stream-status active">● Played locally</span>
-            </div>
-            <div class="monitor-row-compact">
-              <span class="compact-label">Remote Disclosure:</span>
-              <span id="remoteDisclosureBadge" class="stream-status active">● Delivered</span>
-            </div>
+        <!-- Disclosure status -->
+        <div class="disclosure-status">
+          <div class="disclosure-row">
+            <span class="disclosure-label">Local Disclosure</span>
+            <span id="localDisclosureBadge" class="status-tag success">● Played locally</span>
+          </div>
+          <div class="disclosure-row">
+            <span class="disclosure-label">Remote Disclosure</span>
+            <span id="remoteDisclosureBadge" class="status-tag success">● Delivered</span>
           </div>
         </div>
       </div>
 
       <div class="action-section">
-        <button id="stopRecordBtn" class="primary-btn stop-btn">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-            <rect x="5" y="5" width="14" height="14" rx="2" />
+        <button id="stopRecordBtn" class="btn-record-stop">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+            <rect x="5" y="5" width="14" height="14" rx="2"/>
           </svg>
           Stop Recording
         </button>
       </div>
     </section>
 
-    <!-- RECORDINGS HISTORY (Local IndexedDB) -->
-    <section class="recordings-history-section">
-      <div class="section-title-row">
-        <h2>Local Meeting Recordings</h2>
-        <span id="recordingsCount" class="count-pill">0</span>
+    <!-- ── LOCAL RECORDINGS LIST ──────────────────────── -->
+    <section class="recordings-section">
+      <div class="section-header">
+        <h2 class="section-title">Local Recordings</h2>
+        <span id="recordingsCount" class="count-badge">0</span>
       </div>
       <div id="recordingsList" class="recordings-list">
         <div class="empty-state">No recordings yet.</div>
       </div>
     </section>
 
-    <!-- Modal for Preview, Speaker Segmentation & Inspection -->
+    <!-- ── PLAYER MODAL ───────────────────────────────── -->
     <div id="playerModal" class="modal hidden">
-      <div class="modal-content modal-lg">
+      <div class="modal-box">
         <div class="modal-header">
           <h3 id="modalTitle">Playback &amp; Speaker Attribution</h3>
-          <button id="closeModalBtn" class="close-btn">&times;</button>
+          <button id="closeModalBtn" class="modal-close">&times;</button>
         </div>
         <div class="modal-body">
-          <audio id="audioPreview" controls class="audio-control"></audio>
+          <audio id="audioPreview" controls class="audio-player"></audio>
 
-          <!-- Speaker Segmentation Breakdown -->
-          <div id="speakerStatsContainer" class="speaker-stats-box">
-            <div class="stats-header">Speaker Ratio Breakdown</div>
-            <div class="stats-bars">
-              <div class="stat-bar-group">
-                <span class="stat-label">Salesperson:</span>
-                <span id="statSalespersonVal" class="stat-val">0%</span>
-              </div>
-              <div class="stat-bar-group">
-                <span class="stat-label">Remote Audio:</span>
-                <span id="statRemoteVal" class="stat-val">0%</span>
-              </div>
-              <div class="stat-bar-group">
-                <span class="stat-label">Overlap:</span>
-                <span id="statOverlapVal" class="stat-val">0%</span>
-              </div>
+          <div id="speakerStatsContainer" class="speaker-stats">
+            <div class="stats-title">Speaker Ratio</div>
+            <div class="stat-row">
+              <span class="stat-label">Salesperson</span>
+              <span id="statSalespersonVal" class="stat-val">0%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Remote Audio</span>
+              <span id="statRemoteVal" class="stat-val">0%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Overlap</span>
+              <span id="statOverlapVal" class="stat-val">0%</span>
             </div>
           </div>
 
-          <!-- Segment Timeline List -->
           <div class="timeline-section">
-            <div class="timeline-header">Segment Timeline</div>
+            <div class="stats-title">Segment Timeline</div>
             <div id="timelineList" class="timeline-list"></div>
           </div>
 
-          <!-- Raw Metadata JSON Inspector -->
-          <details class="json-details">
-            <summary>View Complete JSON Metadata</summary>
-            <pre id="modalMeta" class="modal-meta"></pre>
+          <details class="json-inspector">
+            <summary>View JSON Metadata</summary>
+            <pre id="modalMeta" class="json-pre"></pre>
           </details>
         </div>
       </div>
     </div>
+
   </div>
 
   <script src="../config.local.js"></script>

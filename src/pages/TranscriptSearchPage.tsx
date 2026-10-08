@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { searchCallTranscripts, TranscriptSearchResult } from '../services/db'
 import { Search, Loader2, FileText, Calendar, AlertCircle } from 'lucide-react'
 
@@ -7,6 +7,10 @@ export const TranscriptSearchPage: React.FC = () => {
   const [results, setResults] = useState<TranscriptSearchResult[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Auto-focus on mount
+  useEffect(() => { inputRef.current?.focus() }, [])
 
   const runSearch = async (term?: string) => {
     const value = (term ?? query).trim()
@@ -31,87 +35,159 @@ export const TranscriptSearchPage: React.FC = () => {
     return (
       <>
         {text.slice(0, idx)}
-        <mark className="bg-theme-accent/10 text-theme-accent font-semibold rounded px-1">{text.slice(idx, idx + term.length)}</mark>
+        <mark className="bg-primary/20 text-primary font-semibold rounded px-0.5">{text.slice(idx, idx + term.length)}</mark>
         {text.slice(idx + term.length)}
       </>
     )
   }
 
   return (
-    <div className="space-y-6 flex flex-col h-full">
-      <div className="select-none shrink-0">
-        <h1 className="text-2xl font-bold tracking-tight text-theme-text font-display">Transcript Search</h1>
-        <p className="text-xs text-theme-textMuted mt-0.5">Find past calls by keyword across every recorded customer transcript</p>
+    <div className="flex flex-col w-full pb-8 pt-4 space-y-6">
+
+      {/* === TOP HEADER === */}
+      <div className="pt-2">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm">
+            <Search className="w-3 h-3" />
+            Semantic Search
+          </span>
+        </div>
+        <h1 className="font-display font-bold text-4xl text-white tracking-tight">Transcript Search</h1>
+        <p className="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">
+          Find past calls by keyword across every recorded and processed customer transcript.
+        </p>
       </div>
 
-      <div className="bg-theme-surface border border-theme-border p-4 rounded-xl shrink-0 shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-theme-textMuted pointer-events-none">
-              <Search className="w-4 h-4" />
-            </span>
+      {/* === SEARCH BLOCK === */}
+      <div className="w-full bg-surface-container-low rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-primary/8 blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col gap-4 relative z-10">
+          {/* Search bar */}
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-surface-container">
+            {loading ? (
+              <Loader2 className="w-5 h-5 text-primary animate-spin shrink-0" />
+            ) : (
+              <Search className="w-5 h-5 text-on-surface-variant shrink-0" />
+            )}
             <input
+              ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && runSearch()}
-              placeholder="e.g. budget, pre-approval, closing date, property..."
+              placeholder="e.g. budget, pre-approval, closing date, property offer..."
               aria-label="Search call transcripts"
-              className="w-full pl-9 pr-4 py-2.5 bg-theme-base border border-theme-border focus:border-theme-accent focus:outline-none rounded-xl text-xs text-theme-text placeholder-theme-textMuted transition"
+              className="flex-1 bg-transparent text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none"
             />
+            {query && (
+              <button
+                onClick={() => { setQuery(''); setResults(null) }}
+                className="w-7 h-7 rounded-full flex items-center justify-center bg-surface-container-high text-outline hover:text-white hover:bg-surface-bright transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            )}
           </div>
-          <button
-            type="button"
-            onClick={() => runSearch()}
-            disabled={loading || !query.trim()}
-            aria-label="Run search"
-            className="flex items-center gap-2 px-5 py-2.5 bg-theme-accent hover:bg-theme-accentHover active:bg-theme-accentHover disabled:opacity-40 text-white rounded-xl text-xs font-semibold transition shadow-xs"
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-            <span>Search</span>
-          </button>
+
+          {/* CTA row */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => runSearch()}
+              disabled={loading || !query.trim()}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-white text-surface-container-lowest font-label-md text-label-md font-bold hover:scale-[0.99] transition-all shadow-lg disabled:opacity-40"
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+              <span>Search Transcripts</span>
+            </button>
+            <kbd className="px-2 py-1 rounded-lg bg-surface-container-high text-outline font-label-sm text-label-sm border border-outline-variant/30">Enter</kbd>
+            <span className="text-outline font-label-sm text-label-sm">to search</span>
+
+            {/* Quick suggestions */}
+            {!query && (
+              <div className="flex flex-wrap gap-1.5 ml-auto">
+                {['budget', 'closing date', 'pre-approval', 'mortgage'].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => { setQuery(s); setTimeout(() => runSearch(s), 0) }}
+                    className="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm transition-colors"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
+      {/* Error */}
       {error && (
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs shrink-0">
-          <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 rounded-2xl bg-error-container/20 border border-error/20 text-error text-xs animate-fadeIn">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto min-h-0">
-        {results === null ? (
-          <div className="flex flex-col items-center justify-center py-20 border border-dashed border-theme-border rounded-xl bg-theme-surface text-theme-textMuted select-none shadow-xs">
-            <FileText className="w-8 h-8 mb-3 text-theme-textMuted/60" />
-            <p className="text-xs font-medium">Search across all call transcripts to surface relevant discussions.</p>
-          </div>
-        ) : results.length === 0 ? (
-          <div className="py-16 text-center border border-dashed border-theme-border rounded-xl bg-theme-surface text-theme-textMuted text-xs shadow-xs">
-            No transcripts matched "{query}".
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <p className="text-xs text-theme-textMuted font-semibold uppercase tracking-wider font-display">
-              {results.length} matching call{results.length > 1 ? 's' : ''}
+      {/* Results */}
+      {results === null ? (
+        <div className="py-20 text-center border border-dashed border-outline-variant/30 rounded-2xl bg-surface-container-low/60">
+          <FileText className="mx-auto mb-3 text-outline" width={40} height={40} />
+          <p className="font-body-md text-body-md text-on-surface-variant font-medium">Search across all call transcripts</p>
+          <p className="font-body-sm text-body-sm text-outline mt-1">Enter keywords above to surface relevant call discussions.</p>
+        </div>
+      ) : results.length === 0 ? (
+        <div className="py-20 text-center border border-dashed border-outline-variant/30 rounded-2xl bg-surface-container-low/60">
+          <p className="font-body-md text-body-md text-on-surface-variant">No transcripts matched "<span className="text-white">{query}</span>"</p>
+          <p className="font-body-sm text-body-sm text-outline mt-1">Try a different keyword or check a different recording.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="font-label-sm text-label-sm text-outline uppercase tracking-wider">
+              {results.length} matching call{results.length > 1 ? 's' : ''} found
             </p>
-            {results.map((result) => (
-              <div key={result.id} className="bg-theme-surface p-4 rounded-xl border border-theme-border space-y-2 hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:-translate-y-[2px] transition">
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <span className="text-sm font-bold text-theme-text font-display">{result.customer_name}</span>
-                  <span className="flex items-center gap-1.5 text-[11px] text-theme-textMuted">
-                    <Calendar className="w-3.5 h-3.5 text-theme-textMuted/70" />
-                    {new Date(result.started_at).toLocaleString()}
-                  </span>
+            <button
+              onClick={() => { setResults(null); setQuery('') }}
+              className="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm transition-colors"
+            >
+              Clear Results
+            </button>
+          </div>
+
+          {results.map((result) => (
+            <div
+              key={result.id}
+              className="bg-surface-container-low rounded-2xl p-5 flex flex-col gap-3 hover:bg-surface-container transition-all"
+            >
+              <div className="flex items-start justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center shrink-0">
+                    {result.customer_name?.charAt(0).toUpperCase() || '?'}
+                  </div>
+                  <div>
+                    <span className="font-headline-sm text-headline-sm text-on-surface">{result.customer_name}</span>
+                    <div className="flex items-center gap-1.5 text-outline font-body-sm text-body-sm mt-0.5">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {new Date(result.started_at).toLocaleString()}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-theme-textMuted leading-relaxed">
+                <span className="px-2.5 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm">
+                  Transcript Match
+                </span>
+              </div>
+
+              {/* Highlighted snippet */}
+              <div className="relative pl-3 border-l-2 border-primary/40">
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
                   …{highlight(result.snippet)}…
                 </p>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,17 +1,34 @@
-import React from 'react';
+import React from 'react'
 
-export function LambdaLogo(props: React.SVGProps<SVGSVGElement>) {
+export const LambdaLogo: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  className = 'w-6 h-6',
+  ...props
+}) => {
   return (
     <svg 
       viewBox="0 0 24 24" 
       fill="none" 
-      stroke="currentColor" 
-      strokeWidth="3.5" 
-      strokeLinecap="square"
-      strokeLinejoin="miter" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
       {...props}
     >
-      <path d="M7 6h4l8 15 M14.5 12.5L7 21" />
+      {/* Modern geometric Greek Lambda (λ) — universal symbol for Wavelength */}
+      <path 
+        d="M17.5 3.5H15.2C14.5 3.5 13.9 3.9 13.5 4.5L6.5 20.5" 
+        stroke="currentColor" 
+        strokeWidth="2.5" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+      />
+      <path 
+        d="M11.5 12.2L17.5 20.5" 
+        stroke="currentColor" 
+        strokeWidth="2.5" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+      />
     </svg>
-  );
+  )
 }
+
+export default LambdaLogo

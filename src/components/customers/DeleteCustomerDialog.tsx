@@ -18,7 +18,6 @@ export const DeleteCustomerDialog: React.FC<DeleteCustomerDialogProps> = ({
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-  // Close on Escape key
   React.useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -45,51 +44,51 @@ export const DeleteCustomerDialog: React.FC<DeleteCustomerDialogProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none animate-fadeIn">
-      {/* Backdrop overlay */}
-      <div className="absolute inset-0 bg-theme-base/80 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} aria-hidden="true" />
 
       {/* Modal Container */}
       <div 
-        className="bg-theme-surface border border-theme-border rounded-2xl w-full max-w-md shadow-xl relative z-10 overflow-hidden animate-slideUp"
+        className="bg-surface-container-low border border-outline-variant/60 rounded-3xl w-full max-w-md shadow-2xl relative z-10 overflow-hidden animate-slideUp"
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="delete-dialog-title"
       >
-        
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Close dialog"
-          className="absolute top-4 right-4 p-1.5 text-theme-textMuted hover:text-theme-text rounded-lg hover:bg-theme-base transition"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         {/* Dialog Body */}
-        <div className="p-6 text-center space-y-4">
-          
+        <div className="p-6 sm:p-8 text-center space-y-4">
           {/* Warning Icon Banner */}
-          <div className="inline-flex items-center justify-center p-3 bg-theme-dangerMuted text-theme-danger border border-theme-dangerMuted rounded-full">
+          <div className="inline-flex items-center justify-center p-3.5 bg-error/15 text-error border border-error/30 rounded-2xl">
             <AlertTriangle className="w-6 h-6" />
           </div>
 
           {/* Heading */}
-          <div className="space-y-1.5">
-            <h3 className="text-lg font-bold text-theme-text font-display">Delete Customer</h3>
-            <p className="text-xs text-theme-textMuted max-w-xs mx-auto leading-relaxed">
-              Are you sure you want to delete <span className="text-theme-text font-bold">{customer.name}</span>? This action is permanent.
+          <div className="space-y-1">
+            <h3 id="delete-dialog-title" className="font-headline-md text-lg font-bold text-white font-display">
+              Delete Customer
+            </h3>
+            <p className="text-xs text-on-surface-variant max-w-xs mx-auto leading-relaxed">
+              Are you sure you want to permanently delete <span className="text-white font-bold">{customer.name}</span>?
             </p>
           </div>
 
           {/* Alert Message */}
-          <div className="p-3 bg-theme-base border border-theme-border rounded-xl text-left text-[11px] text-theme-textMuted leading-normal">
-            <strong className="text-theme-text">Warning:</strong> Deleting this customer will automatically remove all associated calls, transcripts, deals, and tasks under database cascade rules.
+          <div className="p-3.5 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl text-left text-xs text-on-surface-variant leading-relaxed">
+            <strong className="text-error font-semibold">Cascade Warning:</strong> Removing this customer will automatically purge all linked meeting recordings, transcripts, intelligence summaries, and commitments.
           </div>
 
           {/* Error Message (if failed) */}
           {errorMsg && (
-            <div className="p-2.5 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs text-left">
+            <div className="p-3 rounded-2xl bg-error/15 border border-error/30 text-error text-xs text-left">
               {errorMsg}
             </div>
           )}
@@ -99,19 +98,19 @@ export const DeleteCustomerDialog: React.FC<DeleteCustomerDialogProps> = ({
             <button
               onClick={onClose}
               disabled={loading}
-              className="flex-1 py-2 text-sm font-semibold text-theme-textMuted hover:text-theme-text border border-theme-border bg-theme-surface hover:bg-theme-base rounded-xl transition"
+              className="flex-1 py-2.5 rounded-full text-xs font-semibold text-on-surface-variant hover:text-white bg-surface-container hover:bg-surface-container-high transition"
             >
               Cancel
             </button>
             <button
               onClick={handleDelete}
               disabled={loading}
-              className="flex-1 py-2 bg-theme-danger hover:bg-theme-danger text-white rounded-xl text-sm font-semibold shadow-xs transition flex items-center justify-center disabled:opacity-50"
+              className="flex-1 py-2.5 rounded-full bg-error hover:bg-error/90 text-surface-container-lowest font-headline-sm text-xs font-bold shadow-md transition flex items-center justify-center disabled:opacity-50"
             >
               {loading ? (
-                <span className="border-2 border-white border-t-transparent w-4 h-4 rounded-full animate-spin" />
+                <span className="border-2 border-surface-container-lowest border-t-transparent w-4 h-4 rounded-full animate-spin" />
               ) : (
-                'Delete User'
+                'Confirm Delete'
               )}
             </button>
           </div>

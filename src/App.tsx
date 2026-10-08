@@ -9,6 +9,7 @@ import { GlobalTasksPage } from './pages/GlobalTasksPage'
 import { RecordingsPage } from './pages/RecordingsPage'
 import { TranscriptSearchPage } from './pages/TranscriptSearchPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { LambdaLogo } from './components/LambdaLogo'
 
 const AppContent: React.FC = () => {
   const { session, loading } = useAuth()
@@ -16,13 +17,18 @@ const AppContent: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center bg-theme-base gap-4">
-        <div className="relative w-12 h-12">
-          <div className="absolute inset-0 border-4 border-theme-accent/15 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-theme-accent border-t-transparent rounded-full animate-spin"></div>
+      <div className="h-screen w-screen flex flex-col items-center justify-center bg-surface-container-lowest gap-5">
+        <div className="relative flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-primary shadow-[0_0_24px_rgba(208,188,255,0.25)]">
+            <LambdaLogo className="w-8 h-8 text-primary" />
+          </div>
+          <div className="absolute -inset-2 border-2 border-primary/20 border-t-primary rounded-3xl animate-spin" />
         </div>
-        <p className="text-xs font-semibold tracking-wider text-theme-accent uppercase animate-pulse font-display">
-          Loading Wavelength...
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-white tracking-tight text-lg">Wavelength</span>
+        </div>
+        <p className="text-[11px] font-semibold tracking-wider text-outline uppercase animate-pulse">
+          Initializing telemetry pipeline...
         </p>
       </div>
     )

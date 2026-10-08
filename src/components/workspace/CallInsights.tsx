@@ -13,11 +13,11 @@ interface CallInsightsProps {
 const sentimentClass = (sentiment?: string) => {
   switch (sentiment) {
     case 'positive':
-      return 'bg-theme-successMuted text-theme-success border-theme-successMuted'
+      return 'bg-secondary/15 text-secondary border-secondary/30'
     case 'negative':
-      return 'bg-theme-dangerMuted text-theme-danger border-theme-dangerMuted'
+      return 'bg-error/15 text-error border-error/30'
     default:
-      return 'bg-theme-surfaceHover text-theme-textMuted border-theme-border'
+      return 'bg-surface-container-high text-on-surface-variant border-outline-variant/40'
   }
 }
 
@@ -50,7 +50,7 @@ export const CallInsights: React.FC<CallInsightsProps> = ({ summaries, loading, 
     return (
       <div className="space-y-3 animate-pulse">
         {[...Array(2)].map((_, i) => (
-          <div key={i} className="h-20 bg-theme-surface border border-theme-border rounded-xl" />
+          <div key={i} className="h-24 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl" />
         ))}
       </div>
     )
@@ -58,53 +58,57 @@ export const CallInsights: React.FC<CallInsightsProps> = ({ summaries, loading, 
 
   if (summaries.length === 0) {
     return (
-      <div className="py-10 text-center border border-dashed border-theme-border rounded-xl bg-theme-surface select-none">
-        <Sparkles className="w-6 h-6 mx-auto text-theme-textMuted mb-2" />
-        <p className="text-xs text-theme-textMuted">No AI call summaries yet. Process a call to generate insights.</p>
+      <div className="py-12 text-center border border-dashed border-outline-variant/40 rounded-2xl bg-surface-container-lowest select-none">
+        <Sparkles className="w-6 h-6 mx-auto text-primary mb-2 opacity-80" />
+        <p className="text-xs text-on-surface-variant">No AI call summaries recorded yet. Process a recording to generate insights.</p>
       </div>
     )
   }
 
   return (
     <div className="space-y-3">
-      {error && <div className="text-xs text-theme-danger bg-theme-dangerMuted border border-theme-dangerMuted rounded-xl p-3">{error}</div>}
+      {error && (
+        <div className="text-xs text-error bg-error/10 border border-error/25 rounded-2xl p-3.5 animate-fadeIn">
+          {error}
+        </div>
+      )}
       {summaries.map((summary) => {
         const isEditing = editingId === summary.id
         return (
-          <div key={summary.id} className="p-4 rounded-xl border border-theme-border bg-theme-surface space-y-3 shadow-xs">
+          <div key={summary.id} className="p-5 rounded-2xl border border-outline-variant/40 bg-surface-container-lowest space-y-3 shadow-sm transition hover:border-outline-variant/70">
             <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2 text-[11px] text-theme-textMuted">
+              <div className="flex items-center gap-2 text-xs text-outline font-medium">
                 <Calendar className="w-3.5 h-3.5" />
-                {summary.call?.started_at ? new Date(summary.call.started_at).toLocaleString() : 'Call analysis'}
+                <span>{summary.call?.started_at ? new Date(summary.call.started_at).toLocaleString() : 'Synthesized Call'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-md border uppercase tracking-wider ${sentimentClass(summary.sentiment)}`}>
+                <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wider ${sentimentClass(summary.sentiment)}`}>
                   {summary.sentiment || 'neutral'}
                 </span>
                 {!isEditing ? (
                   <button
                     onClick={() => startEdit(summary)}
-                    className="flex items-center gap-1 text-[11px] text-theme-textMuted hover:text-theme-accent border border-theme-border hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:-translate-y-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88C64]/30 bg-theme-surface rounded-lg px-2.5 py-1 transition"
+                    className="inline-flex items-center gap-1.5 text-xs text-on-surface-variant hover:text-white bg-surface-container-high hover:bg-surface-container rounded-full px-3 py-1 transition"
                     title="Correct AI output"
                   >
                     <Edit2 className="w-3 h-3" />
                     <span>Correct</span>
                   </button>
                 ) : (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => save(summary.id)}
                       disabled={savingId === summary.id}
-                      className="flex items-center gap-1 text-[11px] text-theme-success border border-theme-success bg-theme-successMuted rounded-lg px-2.5 py-1 transition disabled:opacity-50"
+                      className="inline-flex items-center gap-1 text-xs text-surface-container-lowest bg-secondary hover:bg-secondary/90 font-bold rounded-full px-3 py-1 transition disabled:opacity-50"
                     >
                       {savingId === summary.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
                       <span>Save</span>
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      className="flex items-center gap-1 text-[11px] text-theme-textMuted border border-theme-border rounded-lg px-2 py-1 transition hover:bg-theme-base"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-outline hover:text-white bg-surface-container-high hover:bg-surface-container transition"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 )}
@@ -117,16 +121,16 @@ export const CallInsights: React.FC<CallInsightsProps> = ({ summaries, loading, 
                   value={draftText}
                   onChange={(e) => setDraftText(e.target.value)}
                   rows={3}
-                  className="w-full bg-theme-surface border border-theme-border rounded-xl p-3 text-xs text-theme-text focus:border-theme-accent focus:ring-1 focus:ring-theme-accent/15 outline-none resize-y"
+                  className="w-full bg-surface-container-low border border-outline-variant/60 rounded-xl p-3 text-xs text-white focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none resize-y"
                 />
               </div>
             ) : (
               <>
-                <p className="text-xs text-theme-text leading-relaxed whitespace-pre-wrap">{summary.summary_text}</p>
+                <p className="text-xs text-white leading-relaxed whitespace-pre-wrap">{summary.summary_text}</p>
                 {summary.product && (
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="text-theme-textMuted uppercase tracking-wider font-semibold">Product:</span>
-                    <span className="text-theme-textMuted">{summary.product}</span>
+                  <div className="flex items-center gap-2 text-xs pt-1">
+                    <span className="text-outline uppercase tracking-wider font-semibold text-[10px]">Product / Topic:</span>
+                    <span className="text-primary font-medium">{summary.product}</span>
                   </div>
                 )}
               </>

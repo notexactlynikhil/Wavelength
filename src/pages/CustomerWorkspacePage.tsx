@@ -8,7 +8,7 @@ import { TranscriptTab } from '../components/workspace/TranscriptTab'
 import { TaskFormModal } from '../components/workspace/TaskFormModal'
 import { DeleteTaskDialog } from '../components/workspace/DeleteTaskDialog'
 import { exportCustomerCsv, exportCustomerPdf } from '../services/exportService'
-import { ChevronRight, ArrowLeft, User, PhoneCall, CheckSquare, AlertCircle, Download, FileText, Loader2, Mic } from 'lucide-react'
+import { ArrowLeft, User, PhoneCall, CheckSquare, AlertCircle, Download, FileText, Loader2, Mic, Building2 } from 'lucide-react'
 
 interface CustomerWorkspacePageProps {
   customer: Customer;
@@ -110,6 +110,9 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
     }
   }
 
+  const getInitials = (name: string) =>
+    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+
   // Render tab contents based on active selection
   const renderTabContent = () => {
     switch (activeTab) {
@@ -149,74 +152,96 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
 
   const tabItems = [
     { id: 'overview', label: 'Overview', icon: User },
-    { id: 'calls', label: 'Calls', icon: PhoneCall },
-    { id: 'transcript', label: 'Transcript', icon: Mic },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-  ] as const;
+    { id: 'calls', label: 'Calls', icon: PhoneCall, count: calls.length },
+    { id: 'transcript', label: 'Transcript & AI', icon: Mic },
+    { id: 'tasks', label: 'Commitments', icon: CheckSquare, count: tasks.filter(t => t.status === 'pending').length },
+  ] as const
 
   return (
-    <div className="space-y-6 flex flex-col h-full animate-fadeIn font-sans select-none">
+    <div className="flex flex-col w-full pb-10 pt-4 space-y-6 animate-fadeIn font-sans select-none">
       
-      {/* 1. Header: Back button + Breadcrumbs */}
-      <div className="flex items-center gap-4 shrink-0">
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Back to Customers List"
-          className="p-2 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl transition duration-150 active:scale-95 shadow-xs"
-          title="Back to Customers List"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </button>
-
-        <div className="flex items-center gap-2 text-sm font-semibold">
-          <button type="button" onClick={onBack} className="text-theme-textMuted hover:text-theme-text transition">
-            Customers
+      {/* 1. Top Header: Back button + Customer Identity + Export Actions */}
+      <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-surface-container">
+        <div className="flex items-center gap-3.5">
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Back to Customers Directory"
+            className="w-10 h-10 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface hover:text-white transition shadow-sm"
+            title="Back to Customers Directory"
+          >
+            <ArrowLeft className="w-4 h-4" />
           </button>
-          <ChevronRight className="w-4 h-4 text-theme-textMuted/60 shrink-0" />
-          <span className="text-theme-text font-bold font-display">{customer.name}</span>
+
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full bg-primary/20 text-primary font-headline-sm text-sm font-bold flex items-center justify-center shrink-0 border border-primary/30">
+              {getInitials(customer.name)}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="font-headline-lg text-xl md:text-2xl font-bold tracking-tight text-white font-display">
+                  {customer.name}
+                </h1>
+                <span className="px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary text-[11px] font-semibold border border-secondary/30">
+                  Active Account
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-xs text-on-surface-variant mt-0.5">
+                {customer.company && (
+                  <span className="flex items-center gap-1">
+                    <Building2 className="w-3.5 h-3.5 text-outline" />
+                    <span>{customer.company}</span>
+                  </span>
+                )}
+                {customer.email && (
+                  <span>• {customer.email}</span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        {/* Export Actions */}
+        <div className="flex items-center gap-2.5 shrink-0 pl-12 md:pl-0">
           <button
             type="button"
             onClick={handleExportCsv}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl text-xs font-semibold transition shadow-xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high hover:bg-surface-container text-on-surface text-xs font-semibold transition shadow-xs"
             title="Export customer history as CSV"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>CSV</span>
+            <Download className="w-3.5 h-3.5 text-outline" />
+            <span>Export CSV</span>
           </button>
           <button
             type="button"
             onClick={handleExportPdf}
             disabled={exportingPdf}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-surface border border-theme-border hover:bg-theme-accent/10 text-theme-textMuted hover:text-theme-text rounded-xl text-xs font-semibold transition disabled:opacity-50 shadow-xs"
-            title="Export customer history as PDF"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high hover:bg-surface-container text-on-surface text-xs font-semibold transition disabled:opacity-50 shadow-xs"
+            title="Export customer dossier as PDF"
           >
-            {exportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin text-theme-accent" /> : <FileText className="w-3.5 h-3.5" />}
-            <span>PDF</span>
+            {exportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" /> : <FileText className="w-3.5 h-3.5 text-outline" />}
+            <span>Export PDF</span>
           </button>
         </div>
-      </div>
+      </section>
 
+      {/* 2. Error Alerts */}
       {exportError && (
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs shrink-0">
-          <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
+        <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-error/10 border border-error/25 text-error text-xs shrink-0 animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-error shrink-0 mt-0.5" />
           <span>{exportError}</span>
         </div>
       )}
 
-      {/* 2. Error Display Panel */}
       {error && (
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-theme-dangerMuted border border-theme-dangerMuted text-theme-danger text-xs shrink-0">
-          <AlertCircle className="w-4 h-4 text-theme-danger shrink-0 mt-0.5" />
+        <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-error/10 border border-error/25 text-error text-xs shrink-0 animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-error shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* 3. Workspace Tab Selection Header */}
-      <div className="flex border-b border-theme-border shrink-0 gap-2">
+      {/* 3. Workspace Tab Navigation (Stitch Pill Style) */}
+      <section className="flex p-1 rounded-full bg-surface-container-low border border-outline-variant/40 w-fit">
         {tabItems.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -224,21 +249,28 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition border-b-2 flex items-center gap-2 ${
+              className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold transition-all ${
                 isActive
-                  ? 'border-theme-accent text-theme-accent'
-                  : 'border-transparent text-theme-textMuted hover:text-theme-text hover:border-theme-border'
+                  ? 'bg-white text-surface-container-lowest font-bold shadow-md'
+                  : 'text-on-surface-variant hover:text-white'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
               <span>{tab.label}</span>
+              {'count' in tab && tab.count !== undefined && tab.count > 0 && (
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                  isActive ? 'bg-surface-container-lowest text-white' : 'bg-surface-container-high text-primary'
+                }`}>
+                  {tab.count}
+                </span>
+              )}
             </button>
           )
         })}
-      </div>
+      </section>
 
       {/* 4. Tab Layout Container */}
-      <div className="flex-1 overflow-y-auto min-h-0 pt-2">
+      <div className="flex-1 min-h-0 pt-1">
         {renderTabContent()}
       </div>
 
@@ -254,15 +286,13 @@ export const CustomerWorkspacePage: React.FC<CustomerWorkspacePageProps> = ({
         initialTitle={followUpTitle}
       />
 
-      {/* Delete Task Confirmation Dialog */}
+      {/* Delete Task Dialog */}
       <DeleteTaskDialog
         isOpen={isDeleteTaskOpen}
         onClose={() => setIsDeleteTaskOpen(false)}
         onConfirm={handleDeleteTaskConfirm}
-        task={selectedTask}
       />
 
     </div>
   )
 }
-

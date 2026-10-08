@@ -29,7 +29,7 @@ export const CustomerCard: React.FC<CustomerCardProps> = ({
     .map((n) => n[0])
     .join('')
     .toUpperCase()
-    .slice(0, 2);
+    .slice(0, 2)
 
   return (
     <div 
@@ -43,84 +43,83 @@ export const CustomerCard: React.FC<CustomerCardProps> = ({
         }
       }}
       aria-label={`Open workspace for ${customer.name}`}
-      className="bg-theme-surface p-5 rounded-2xl border border-theme-border hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:-translate-y-[2px] transition-all duration-200 flex flex-col justify-between h-full group relative overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#E88C64]/30"
+      className="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/40 hover:border-primary/50 hover:shadow-xl transition-all duration-200 flex flex-col justify-between h-full group relative overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
     >
       <div className="space-y-4 relative z-10">
         {/* Header: Avatar + Name / Company */}
-        <div className="flex items-start gap-3">
-          {/* Avatar Icon */}
-          <div className="w-10 h-10 rounded-xl bg-[#E88C64]/30 text-[#F5F5F5] border border-[#E88C64]/20 flex items-center justify-center font-bold text-sm select-none shrink-0 shadow-xs">
+        <div className="flex items-start gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-sm select-none shrink-0 shadow-xs font-display">
             {initials || <User className="w-4 h-4" />}
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-base font-bold text-theme-text leading-tight truncate group-hover:text-theme-accent transition-colors font-display" title={customer.name}>
+            <h3 className="text-base font-bold text-white leading-tight truncate group-hover:text-primary transition-colors font-display" title={customer.name}>
               {customer.name}
             </h3>
             {customer.company ? (
-              <div className="flex items-center gap-1 mt-1 text-xs text-theme-textMuted truncate">
-                <Building2 className="w-3.5 h-3.5 text-theme-textMuted shrink-0" />
+              <div className="flex items-center gap-1.5 mt-1 text-xs text-on-surface-variant truncate">
+                <Building2 className="w-3.5 h-3.5 text-outline shrink-0" />
                 <span className="truncate">{customer.company}</span>
               </div>
             ) : (
-              <div className="text-[11px] italic text-theme-textMuted/70 mt-1">No Company linked</div>
+              <div className="text-[11px] italic text-outline mt-1">No company listed</div>
             )}
           </div>
         </div>
 
         {/* Contact Info (Email + Phone) */}
-        <div className="space-y-2 text-xs text-theme-textMuted border-t border-theme-border/80 pt-3">
+        <div className="space-y-2 text-xs text-on-surface-variant border-t border-surface-container pt-3">
           {customer.email ? (
             <div className="flex items-center gap-2 truncate">
-              <Mail className="w-3.5 h-3.5 text-theme-textMuted shrink-0" />
-              <span className="truncate" title={customer.email}>
+              <Mail className="w-3.5 h-3.5 text-outline shrink-0" />
+              <span className="truncate text-white font-medium" title={customer.email}>
                 {customer.email}
               </span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-theme-textMuted/60 italic">
-              <Mail className="w-3.5 h-3.5 text-theme-textMuted/50 shrink-0" />
+            <div className="flex items-center gap-2 text-outline italic">
+              <Mail className="w-3.5 h-3.5 text-outline/60 shrink-0" />
               <span>No email provided</span>
             </div>
           )}
 
           {customer.phone ? (
             <div className="flex items-center gap-2 truncate">
-              <Phone className="w-3.5 h-3.5 text-theme-textMuted shrink-0" />
+              <Phone className="w-3.5 h-3.5 text-outline shrink-0" />
               <span className="truncate">{customer.phone}</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-theme-textMuted/60 italic">
-              <Phone className="w-3.5 h-3.5 text-theme-textMuted/50 shrink-0" />
-              <span>No phone number</span>
+            <div className="flex items-center gap-2 text-outline italic">
+              <Phone className="w-3.5 h-3.5 text-outline/60 shrink-0" />
+              <span>No phone recorded</span>
             </div>
           )}
         </div>
 
         {/* Metadata: Created At */}
-        <div className="flex items-center gap-1.5 text-[11px] text-theme-textMuted">
-          <Calendar className="w-3.5 h-3.5 text-theme-textMuted/70" />
-          <span>Added: {formatDate(customer.created_at)}</span>
+        <div className="flex items-center gap-1.5 text-[11px] text-outline">
+          <Calendar className="w-3.5 h-3.5 text-outline" />
+          <span>Ingested: {formatDate(customer.created_at)}</span>
         </div>
       </div>
 
       {/* Footer: Tags & Actions Row */}
-      <div className="flex items-center justify-between mt-4 border-t border-theme-border/80 pt-3 relative z-10">
+      <div className="flex items-center justify-between mt-4 border-t border-surface-container pt-3 relative z-10">
         {/* Tags */}
-        <div className="flex flex-wrap gap-1 max-w-[70%]">
+        <div className="flex flex-wrap gap-1.5 max-w-[70%]">
           {customer.tags && customer.tags.length > 0 ? (
             customer.tags.slice(0, 2).map((tag, index) => (
               <span 
                 key={index}
-                className="bg-theme-accentMuted text-theme-accent border border-theme-accent/15 text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                className="bg-primary/15 text-primary border border-primary/25 text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
               >
                 {tag}
               </span>
             ))
           ) : (
-            <span className="text-[11px] text-theme-textMuted/60 italic">No tags</span>
+            <span className="text-[11px] text-outline italic">No tags</span>
           )}
           {customer.tags && customer.tags.length > 2 && (
-            <span className="bg-theme-base text-theme-textMuted text-[10px] font-semibold px-1.5 py-0.5 rounded-md border border-theme-border">
+            <span className="bg-surface-container text-outline text-[10px] font-semibold px-2 py-0.5 rounded-full">
               +{customer.tags.length - 2}
             </span>
           )}
@@ -128,28 +127,26 @@ export const CustomerCard: React.FC<CustomerCardProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1">
-          {/* Edit */}
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation();
-              onEdit(customer);
+              e.stopPropagation()
+              onEdit(customer)
             }}
             aria-label={`Edit ${customer.name}`}
-            className="p-1.5 text-theme-textMuted hover:text-theme-text hover:bg-theme-accent/10 rounded-lg transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition-colors"
             title="Edit Customer"
           >
             <Edit2 className="w-3.5 h-3.5" />
           </button>
-          {/* Delete */}
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation();
-              onDelete(customer);
+              e.stopPropagation()
+              onDelete(customer)
             }}
             aria-label={`Delete ${customer.name}`}
-            className="p-1.5 text-theme-textMuted hover:text-theme-danger hover:bg-theme-dangerMuted rounded-lg transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error/15 transition-colors"
             title="Delete Customer"
           >
             <Trash2 className="w-3.5 h-3.5" />

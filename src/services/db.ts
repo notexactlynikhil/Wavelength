@@ -139,6 +139,15 @@ export async function assignRecordingToCustomer(recordingId: string, customerId:
   return data;
 }
 
+export async function deleteRecording(recordingId: string) {
+  const { error } = await supabase
+    .from('meeting_recordings')
+    .delete()
+    .eq('id', recordingId);
+
+  if (error) throw handleDbError(error, 'Failed to delete recording');
+}
+
 /**
  * Keyword search across the user's call transcripts (raw, user-facing version).
  */

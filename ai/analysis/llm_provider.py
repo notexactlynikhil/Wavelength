@@ -32,9 +32,59 @@ class OllamaLLMProvider(LLMProvider):
         self.requested_model = model or settings.OLLAMA_MODEL
         self._active_model = None
 
+    def _ensure_ollama_alive(self) -> bool:
+        """Check if Ollama server is alive. If not, attempt to start it."""
+        tags_url = f"{self.base_url}/api/tags"
+        try:
+            req = urllib.request.Request(tags_url)
+            with urllib.request.urlopen(req, timeout=2) as response:
+                if response.status == 200:
+                    return True
+        except Exception:
+            pass
+
+        # Attempt to auto-launch ollama serve
+        try:
+            import subprocess
+            import shutil
+            import time
+
+            ollama_bin = shutil.which("ollama")
+            if not ollama_bin and os.name == "nt":
+                local_app_data = os.environ.get("LOCALAPPDATA", "")
+                candidate = os.path.join(local_app_data, "Programs", "Ollama", "ollama.exe")
+                if os.path.exists(candidate):
+                    ollama_bin = candidate
+
+            if ollama_bin:
+                print(f"[Ollama] Starting Ollama background server via '{ollama_bin} serve'...")
+                creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+                subprocess.Popen(
+                    [ollama_bin, "serve"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    creationflags=creationflags
+                )
+                for _ in range(8):
+                    time.sleep(1)
+                    try:
+                        req = urllib.request.Request(tags_url)
+                        with urllib.request.urlopen(req, timeout=2) as resp:
+                            if resp.status == 200:
+                                print("[Ollama] ✓ Ollama server started successfully.")
+                                return True
+                    except Exception:
+                        continue
+        except Exception as e:
+            print(f"[Ollama] Auto-start attempt failed: {str(e)}")
+
+        return False
+
     def _resolve_model_name(self) -> str:
         if self._active_model:
             return self._active_model
+
+        self._ensure_ollama_alive()
 
         # Query Ollama to verify or find available model
         tags_url = f"{self.base_url}/api/tags"
@@ -69,6 +119,7 @@ class OllamaLLMProvider(LLMProvider):
         return self._active_model
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        self._ensure_ollama_alive()
         model_name = self._resolve_model_name()
         endpoint = f"{self.base_url}/api/chat"
 
